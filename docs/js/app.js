@@ -11,7 +11,7 @@ const state = {
     biomes: [],
     evolutions: [],
     builds: [],
-    selectedCharacter: null,
+    selectedCharacters: [],
     selectedBiome: null,
     selectedBalls: [],
     selectedPassives: [],
@@ -74,12 +74,13 @@ function renderCharacters() {
     grid.innerHTML = state.characters
         .map(
             (c) => `
-        <div class="entity-item ${state.selectedCharacter === c.name ? "selected" : ""}"
+        <div class="entity-item ${state.selectedCharacters.includes(c.name) ? "selected" : ""}"
              data-name="${c.name}" data-type="character"
              data-tooltip="${c.name}|${c.ability || "Aucune capacité"}|Balle: ${c.starting_ball} · Tier ${c.tier}">
             ${imgTag(c.image, c.name, "🎮")}
             <span class="entity-name">${c.name.replace("The ", "")}</span>
             <span class="tier-badge tier-${c.tier.toLowerCase().replace('+', '-plus')}">${c.tier}</span>
+            ${state.selectedCharacters.indexOf(c.name) >= 0 ? `<span class="char-slot-badge">${state.selectedCharacters.indexOf(c.name) + 1}</span>` : ""}
         </div>`
         )
         .join("");
@@ -186,14 +187,28 @@ function updateSelectedPassives() {
 // ═══ EVENTS ═══
 
 function bindEvents() {
-    // Character
+    // Character (max 2)
     $("#character-grid").addEventListener("click", (e) => {
         const item = e.target.closest(".entity-item");
         if (!item) return;
         const name = item.dataset.name;
-        state.selectedCharacter = state.selectedCharacter === name ? null : name;
-        renderCharacters();
-        if (state.selectedCharacter) {
+        const idx = state.selectedCharacters.indexOf(name);
+        if (idx >= 0) {
+            // Deselect
+            state.selectedCharacters.splice(idx, 1);
+        } else if (state.selectedCharacters.length < 2) {
+            // Select (max 2)
+            state.selectedCharacters.push(name);
+            const char = state.characters.find((c) => c.name === name);
+            if (char && !state.selectedBalls.includes(char.starting_ball)) {
+                state.selectedBalls.push(char.starting_ball);
+                renderBalls();
+                updateSelectedBalls();
+            }
+        } else {
+            // Already 2 selected → replace the oldest
+            state.selectedCharacters.shift();
+            state.selectedCharacters.push(name);
             const char = state.characters.find((c) => c.name === name);
             if (char && !state.selectedBalls.includes(char.starting_ball)) {
                 state.selectedBalls.push(char.starting_ball);
@@ -201,6 +216,7 @@ function bindEvents() {
                 updateSelectedBalls();
             }
         }
+        renderCharacters();
     });
 
     // Biome
@@ -282,7 +298,7 @@ function bindEvents() {
 
     // Reset
     $("#btn-reset").addEventListener("click", () => {
-        state.selectedCharacter = null;
+        state.selectedCharacters = [];
         state.selectedBiome = null;
         state.selectedBalls = [];
         state.selectedPassives = [];
@@ -794,18 +810,22 @@ function suggest() {
 function computeSuggestions() {
     let currentBalls = [...state.selectedBalls];
     const currentPassives = [...state.selectedPassives];
-    const character = state.selectedCharacter;
+    const characters = [...state.selectedCharacters];
     const biome = state.selectedBiome;
     const preferStyle = state.selectedStyle;
 
-    // ─── Step 1: Character info + enrichment ───
-    let charInfo = null;
-    if (character) {
-        charInfo = state.characters.find((c) => c.name === character);
-        if (charInfo && !currentBalls.includes(charInfo.starting_ball)) {
-            currentBalls = [charInfo.starting_ball, ...currentBalls];
+    // ─── Step 1: Character info + enrichment (supports 2 characters) ───
+    const charInfos = [];
+    for (const charName of characters) {
+        const ci = state.characters.find((c) => c.name === charName);
+        if (ci) {
+            charInfos.push(ci);
+            if (!currentBalls.includes(ci.starting_ball)) {
+                currentBalls = [ci.starting_ball, ...currentBalls];
+            }
         }
     }
+    const charInfo = charInfos[0] || null; // primary for backward compat
 
     // ─── Step 2: Possible evolutions (with alt ingredients) ───
     let possibleEvolutions = [];
@@ -886,40 +906,42 @@ function computeSuggestions() {
         const tierScore = { "S+": 45, S: 35, "A+": 28, A: 22, B: 12 };
         score += tierScore[b.tier] || 0;
 
-        // === Character match ===
-        if (character && (b.recommended_characters || "").includes(character)) {
-            score += 45;
-            reasons.push(`Recommandé pour ${character}`);
-        }
+        // === Character match (both characters) ===
+        for (const ci of charInfos) {
+            if ((b.recommended_characters || "").includes(ci.name)) {
+                score += 45;
+                reasons.push(`Recommandé pour ${ci.name}`);
+            }
 
-        // === Character playstyle affinity ===
-        if (charInfo && b.archetype) {
-            const charStrengths = (charInfo.strengths || []).join(" ").toLowerCase();
-            const charPlaystyle = (charInfo.playstyle || "").toLowerCase();
-            const archLower = b.archetype.toLowerCase();
-            if (charStrengths.includes("dps") && (archLower.includes("dps") || archLower.includes("boss"))) {
-                score += 15;
-                reasons.push(`Synergie playstyle DPS`);
+            // Playstyle affinity
+            if (b.archetype) {
+                const charStrengths = (ci.strengths || []).join(" ").toLowerCase();
+                const charPlaystyle = (ci.playstyle || "").toLowerCase();
+                const archLower = b.archetype.toLowerCase();
+                if (charStrengths.includes("dps") && (archLower.includes("dps") || archLower.includes("boss"))) {
+                    score += 15;
+                    reasons.push(`Synergie playstyle DPS (${ci.name.replace("The ", "")})`);
+                }
+                if (charStrengths.includes("defense") && (archLower.includes("sustain") || archLower.includes("survival"))) {
+                    score += 15;
+                    reasons.push(`Synergie playstyle défensif (${ci.name.replace("The ", "")})`);
+                }
+                if (charPlaystyle.includes("speed") && archLower.includes("speed")) {
+                    score += 10;
+                    reasons.push(`Synergie vitesse (${ci.name.replace("The ", "")})`);
+                }
             }
-            if (charStrengths.includes("defense") && (archLower.includes("sustain") || archLower.includes("survival"))) {
-                score += 15;
-                reasons.push(`Synergie playstyle défensif`);
-            }
-            if (charPlaystyle.includes("speed") && archLower.includes("speed")) {
-                score += 10;
-                reasons.push(`Synergie vitesse`);
-            }
-        }
 
-        // === Character best_balls match ===
-        if (charInfo && charInfo.best_balls) {
-            const buildBallsRaw = b.core_balls.split(",").map((s) => s.trim().toLowerCase());
-            for (const bb of charInfo.best_balls) {
-                const bbLower = bb.toLowerCase();
-                if (buildBallsRaw.some((name) => name.includes(bbLower) || bbLower.includes(name))) {
-                    score += 12;
-                    reasons.push(`${bb} recommandé pour ${character}`);
-                    break;
+            // best_balls match
+            if (ci.best_balls) {
+                const buildBallsRaw = b.core_balls.split(",").map((s) => s.trim().toLowerCase());
+                for (const bb of ci.best_balls) {
+                    const bbLower = bb.toLowerCase();
+                    if (buildBallsRaw.some((name) => name.includes(bbLower) || bbLower.includes(name))) {
+                        score += 12;
+                        reasons.push(`${bb} recommandé pour ${ci.name.replace("The ", "")}`);
+                        break;
+                    }
                 }
             }
         }
@@ -1009,17 +1031,17 @@ function computeSuggestions() {
             }
         }
 
-        // === Character dynamic scoring (wiki_ability mechanics) ===
-        if (character) {
+        // === Character dynamic scoring (wiki_ability mechanics, both chars) ===
+        for (const ci of charInfos) {
             for (const bbName of buildBalls) {
-                const charBonus = getCharacterBallBonus(character, bbName);
+                const charBonus = getCharacterBallBonus(ci.name, bbName);
                 if (charBonus.bonus > 0) {
                     score += charBonus.bonus;
-                    if (charBonus.reason) reasons.push(`🎮 ${charBonus.reason}`);
+                    if (charBonus.reason) reasons.push(`🎮 ${charBonus.reason} (${ci.name.replace("The ", "")})`);
                 }
                 if (charBonus.anti) {
                     score -= 10;
-                    if (charBonus.antiReason) reasons.push(`⚠️ ${charBonus.antiReason}`);
+                    if (charBonus.antiReason) reasons.push(`⚠️ ${charBonus.antiReason} (${ci.name.replace("The ", "")})`);
                 }
             }
         }
@@ -1168,32 +1190,32 @@ function computeSuggestions() {
     // ─── Step 11: Build evolution graph for visualization ───
     const evolutionGraph = buildEvolutionGraph(currentBalls);
 
-    // ─── Step 12: Character-specific hints ───
-    let characterHints = null;
-    if (character && CHARACTER_MECHANICS[character]) {
-        const mech = CHARACTER_MECHANICS[character];
+    // ─── Step 12: Character-specific hints (supports 2 characters) ───
+    const characterHintsList = [];
+    for (const ci of charInfos) {
+        if (!CHARACTER_MECHANICS[ci.name]) continue;
+        const mech = CHARACTER_MECHANICS[ci.name];
         const goodBalls = currentBalls.filter((b) => {
-            const cb = getCharacterBallBonus(character, b);
+            const cb = getCharacterBallBonus(ci.name, b);
             return cb.bonus > 0;
         });
         const badBalls = currentBalls.filter((b) => {
-            const cb = getCharacterBallBonus(character, b);
+            const cb = getCharacterBallBonus(ci.name, b);
             return cb.anti;
         });
-        // Suggest ideal balls the player doesn't have yet
         const idealBalls = (mech.ballPrefs.effect || []).filter((e) => !currentBalls.includes(e) && ballsByName[e]);
-        characterHints = {
-            name: character,
+        characterHintsList.push({
+            name: ci.name,
             desc: mech.desc,
             goodBalls,
             badBalls,
             idealBalls: idealBalls.slice(0, 4),
             antiReason: mech.antiReason,
-        };
+        });
     }
 
     return {
-        character: charInfo,
+        characters: charInfos,
         current_balls: currentBalls,
         current_passives: currentPassives,
         possible_evolutions: possibleEvolutions.slice(0, 15),
@@ -1205,7 +1227,7 @@ function computeSuggestions() {
         evolution_paths: evolutionPaths.slice(0, 8),
         passive_ball_synergies: passiveBallSynergies.slice(0, 6),
         evolution_graph: evolutionGraph,
-        character_hints: characterHints,
+        character_hints: characterHintsList,
     };
 }
 
@@ -1252,21 +1274,22 @@ function renderResults(data) {
         </div>`;
     }
 
-    // Character hints card
-    if (data.character_hints) {
-        const ch = data.character_hints;
-        const goodHTML = ch.goodBalls.length > 0
-            ? `<div class="char-hint-row"><span class="char-hint-label">✅ Synergiques :</span> ${ch.goodBalls.map((b) => `<span class="effect-tag strong">${b}</span>`).join("")}</div>` : "";
-        const badHTML = ch.badBalls.length > 0
-            ? `<div class="char-hint-row"><span class="char-hint-label">⚠️ Sous-optimales :</span> ${ch.badBalls.map((b) => `<span class="effect-tag weak">${b}</span>`).join("")}${ch.antiReason ? `<small class="char-anti-reason">${ch.antiReason}</small>` : ""}</div>` : "";
-        const idealHTML = ch.idealBalls.length > 0
-            ? `<div class="char-hint-row"><span class="char-hint-label">🎯 Balles idéales à trouver :</span> ${ch.idealBalls.map((b) => `<span class="effect-tag">${b}</span>`).join("")}</div>` : "";
-        analysisSummary += `
-        <div class="analysis-card char-card">
-            <h4 class="analysis-title">🎮 ${ch.name}</h4>
-            <p class="analysis-desc">${ch.desc}</p>
-            ${goodHTML}${badHTML}${idealHTML}
-        </div>`;
+    // Character hints cards (supports 2 characters)
+    if (data.character_hints && data.character_hints.length > 0) {
+        for (const ch of data.character_hints) {
+            const goodHTML = ch.goodBalls.length > 0
+                ? `<div class="char-hint-row"><span class="char-hint-label">✅ Synergiques :</span> ${ch.goodBalls.map((b) => `<span class="effect-tag strong">${b}</span>`).join("")}</div>` : "";
+            const badHTML = ch.badBalls.length > 0
+                ? `<div class="char-hint-row"><span class="char-hint-label">⚠️ Sous-optimales :</span> ${ch.badBalls.map((b) => `<span class="effect-tag weak">${b}</span>`).join("")}${ch.antiReason ? `<small class="char-anti-reason">${ch.antiReason}</small>` : ""}</div>` : "";
+            const idealHTML = ch.idealBalls.length > 0
+                ? `<div class="char-hint-row"><span class="char-hint-label">🎯 Balles idéales à trouver :</span> ${ch.idealBalls.map((b) => `<span class="effect-tag">${b}</span>`).join("")}</div>` : "";
+            analysisSummary += `
+            <div class="analysis-card char-card">
+                <h4 class="analysis-title">🎮 ${ch.name}</h4>
+                <p class="analysis-desc">${ch.desc}</p>
+                ${goodHTML}${badHTML}${idealHTML}
+            </div>`;
+        }
     }
 
     // Passive↔Ball synergies
