@@ -408,6 +408,375 @@ const STYLE_MAP = {
     survival: ["Survival", "Sustain"],
 };
 
+// ─── CHARACTER MECHANICS — Dynamic scoring based on wiki_ability ───
+const CHARACTER_MECHANICS = {
+    "The Itchy Finger": {
+        desc: "Tire 2x plus vite, aim dispersé, bouge à pleine vitesse",
+        ballPrefs: { speed: ["Fast", "Very Fast"], effect: ["Burn", "Poison", "Bleed"] },
+        bonus: 20, reason: "Cadence 2x → les DoT stack rapiement",
+        antiSynergy: { speed: ["Slow", "Very Slow"] }, antiReason: "Balles lentes sous-optimales avec tir rapide",
+    },
+    "The Physicist": {
+        desc: "Gravité attire les balles vers le fond",
+        ballPrefs: { effect: ["Burn", "Poison", "Earthquake"], category: ["Elemental"] },
+        bonus: 15, reason: "La gravité concentre les AoE au fond",
+        antiSynergy: {}, antiReason: "",
+    },
+    "The Shieldbearer": {
+        desc: "Bouclier qui renvoie les balles",
+        ballPrefs: { speed: ["Slow"], effect: ["Iron"] },
+        bonus: 18, reason: "Les balles rebondissent sur le bouclier pour +dmg",
+        antiSynergy: {}, antiReason: "",
+    },
+    "The Cohabitants": {
+        desc: "Chaque tir est dupliqué en miroir, dégâts divisés par 2",
+        ballPrefs: { effect: ["Burn", "Poison", "Bleed", "Charm", "Freeze"] },
+        bonus: 18, reason: "Tir miroir double l'application des effets de statut",
+        antiSynergy: {}, antiReason: "",
+    },
+    "The Empty Nester": {
+        desc: "Pas de baby balls — tire plusieurs instances d'une balle spéciale",
+        ballPrefs: { speed: ["Fast", "Very Fast"] },
+        bonus: 20, reason: "Multi-instances = stack massif d'effets",
+        antiSynergy: { effect: ["Baby Ball Spawn"] }, antiReason: "Pas de baby balls → synergies baby inutiles",
+    },
+    "The Flagellant": {
+        desc: "Balles rebondissent normalement en bas",
+        ballPrefs: {},
+        bonus: 8, reason: "Rebonds supplémentaires",
+        antiSynergy: {}, antiReason: "",
+    },
+    "The Spendthrift": {
+        desc: "Tire toutes les balles en même temps en arc",
+        ballPrefs: { effect: ["Burn", "Poison", "Bleed", "Freeze"] },
+        bonus: 18, reason: "Salve = couverture AoE massive, bon avec DoT",
+        antiSynergy: {}, antiReason: "",
+    },
+    "The Juggler": {
+        desc: "Lobe les balles en l'air vers une position cible",
+        ballPrefs: { effect: ["Earthquake", "Burn"], speed: ["Slow"] },
+        bonus: 15, reason: "Ciblage précis → burst sur une zone",
+        antiSynergy: {}, antiReason: "",
+    },
+    "The Makeshift Sisyphus": {
+        desc: "Pas de dmg direct, mais AoE et status ×4. Pas de baby balls",
+        ballPrefs: { effect: ["Burn", "Poison", "Bleed", "Freeze", "Earthquake"] },
+        bonus: 25, reason: "×4 dégâts de statut → tous les DoT dominent",
+        antiSynergy: { effect: ["Baby Ball Spawn", "N/A"], category: ["Basic"] }, antiReason: "Pas de dmg direct → balles sans effet de statut inutiles",
+    },
+    "The Shade": {
+        desc: "Balles tirées depuis l'arrière, 10% crit de base",
+        ballPrefs: { speed: ["Fast", "Very Fast"] },
+        bonus: 15, reason: "Crit 10% de base → DPS brut élevé",
+        antiSynergy: {}, antiReason: "",
+    },
+    "The Embedded": {
+        desc: "Balles percent les ennemis jusqu'au mur",
+        ballPrefs: { effect: ["Burn", "Poison", "Bleed"] },
+        bonus: 20, reason: "Pierce = chaque balle touche TOUS les ennemis sur son passage",
+        antiSynergy: {}, antiReason: "",
+    },
+    "The Repentant": {
+        desc: "+5% dmg par rebond, retour au joueur au mur arrière",
+        ballPrefs: { speed: ["Slow", "Medium"] },
+        bonus: 20, reason: "+5%/rebond → les balles lentes multi-rebonds explosent",
+        antiSynergy: { speed: ["Very Fast"] }, antiReason: "Balles trop rapides = moins de rebonds",
+    },
+    "The Tactician": {
+        desc: "Combat au tour par tour",
+        ballPrefs: { effect: ["Freeze", "Charm"] },
+        bonus: 12, reason: "Tour par tour → le contrôle est roi",
+        antiSynergy: {}, antiReason: "",
+    },
+};
+
+// ─── PASSIVE↔BALL SYNERGY MAP ───
+const PASSIVE_BALL_SYNERGIES = [
+    // Baby ball synergies
+    { passives: ["Baby Rattle", "War Horn", "Iron Onesie", "Cornucopia"], balls: ["Brood Mother", "Egg Sac", "Catapult", "Shotgun", "Maggot", "Voluptuous Egg Sac", "Spider Queen"],
+      effects: ["Baby Ball Spawn"], reason: "Synergie Baby Balls : plus de baby balls = plus de dégâts", tier: "S" },
+    // Crit synergies
+    { passives: ["Diamond Hilted Dagger", "Sapphire Hilted Dagger", "Ruby Hilted Dagger", "Emerald Hilted Dagger", "Deadeye's Amulet", "Deadeye's Cross", "Gracious Impaler", "Deadeye's Impaler"],
+      balls: [], effects: [], reason: "Synergie Critique : stack les daggers pour Deadeye's Cross", tier: "A", anyBall: true },
+    // Poison synergy
+    { passives: ["Cursed Elixir"], balls: ["Poison", "Noxious", "Brimstone", "Swamp", "Virus"],
+      effects: ["Poison"], reason: "Cursed Elixir : ennemis empoisonnés deviennent des zombies", tier: "A" },
+    // Burn synergy
+    { passives: ["Midnight Oil"], balls: ["Burn", "Inferno", "Magma", "Sun", "Brimstone", "Fireworks", "Frozen Flame"],
+      effects: ["Burn"], reason: "Midnight Oil : bonus +10-20 dmg feu sur ennemis en feu", tier: "A" },
+    // Ghost/Phase synergy
+    { passives: ["Ethereal Cloak", "Ghostly Corset", "Phantom Regalia"], balls: ["Ghost", "Phantom", "Wraith", "Assassin"],
+      effects: [], reason: "Synergie Phase : les balles traversent les ennemis avec bonus dmg", tier: "A" },
+    // Vampire/Lifesteal synergy
+    { passives: ["Vampiric Sword", "Soul Reaver", "Everflowing Goblet", "Bandage Roll"], balls: ["Vampire", "Vampire Lord", "Leech", "Nosferatu", "Mosquito King", "Mosquito Swarm", "Soul Sucker"],
+      effects: ["Heal", "Lifesteal", "Leech"], reason: "Synergie Vampire : heal + vol de vie = immortalité", tier: "S" },
+    // Charm synergy
+    { passives: ["Kiss of Death", "Lover's Quiver"], balls: ["Charm", "Incubus", "Succubus", "Satan", "Berserk", "Lovestruck"],
+      effects: ["Charm"], reason: "Synergies Charme : chance d'insta-kill les charmés", tier: "A" },
+    // Freeze synergy
+    { passives: ["Frozen Spike"], balls: ["Freeze", "Blizzard", "Freeze Ray", "Frozen Flame", "Glacier", "Wraith"],
+      effects: ["Freeze", "Frostburn"], reason: "Frozen Spike : ennemis gelés émettent du froid → contrôle en chaîne", tier: "S" },
+    // AoE synergy
+    { passives: ["Magic Staff", "Pressure Valve"], balls: ["Earthquake", "Bomb", "Nuclear Bomb", "Magma", "Landslide", "Lightning"],
+      effects: ["Earthquake"], reason: "Magic Staff : +20% dmg AoE sur earthquake/laser/lightning", tier: "A" },
+    // Bounce synergy
+    { passives: ["Rubber Headband", "Wagon Wheel", "Hourglass", "Upturned Hatchet"], balls: [],
+      effects: [], reason: "Synergies Rebond : bonus de dégâts par rebond", tier: "B", anyBall: true },
+    // Stone ally synergy
+    { passives: ["Archer's Effigy", "Stone Effigy", "Healer's Effigy", "Artificial Heart", "Traitor's Cowl", "Golden Bull"], balls: [],
+      effects: [], reason: "Synergie Alliés : allies en pierre + buffs de santé", tier: "B", anyBall: true },
+    // Shield/Defense synergy
+    { passives: ["Breastplate", "Protective Charm", "Eye of the Beholder", "Odiferous Shell"], balls: ["Iron", "Steel"],
+      effects: [], reason: "Synergie Défense : survie et réduction de dégâts", tier: "B" },
+];
+
+// ─── PATHFINDING: find optimal routes to high-tier evolutions ───
+function findEvolutionPaths(currentBalls) {
+    const paths = [];
+    const highTierEvos = state.evolutions.filter((e) => e.tier === "S+" || e.tier === "S");
+
+    for (const evo of highTierEvos) {
+        const path = traceEvolutionPath(evo.result_ball, currentBalls, new Set(), 0);
+        if (path) {
+            paths.push(path);
+        }
+    }
+
+    // Sort by: fewer missing balls = more feasible
+    paths.sort((a, b) => a.missing.length - b.missing.length || a.depth - b.depth);
+    return paths;
+}
+
+function traceEvolutionPath(target, currentBalls, visited, depth) {
+    if (depth > 6) return null;
+    if (visited.has(target)) return null;
+    visited.add(target);
+
+    if (currentBalls.includes(target)) {
+        return { ball: target, tier: null, status: "owned", missing: [], steps: [], depth: 0 };
+    }
+
+    const recipe = evosByResult[target];
+    if (!recipe) {
+        // Base ball, not owned → need to pick it up
+        return { ball: target, tier: null, status: "pickup", missing: [target], steps: [], depth: 0 };
+    }
+
+    const ingredients = [recipe.ingredient_1, recipe.ingredient_2];
+    if (recipe.ingredient_3) ingredients.push(recipe.ingredient_3);
+
+    // Check alt ingredients too
+    const altMap = {};
+    if (recipe.ingredient_1_alt) altMap[recipe.ingredient_1] = recipe.ingredient_1_alt;
+    if (recipe.ingredient_2_alt) altMap[recipe.ingredient_2] = recipe.ingredient_2_alt;
+
+    let totalMissing = [];
+    const steps = [];
+
+    for (const ing of ingredients) {
+        const alt = altMap[ing];
+        // Use alt if we own it and don't own the primary
+        const useAlt = alt && !currentBalls.includes(ing) && currentBalls.includes(alt);
+        const actualIng = useAlt ? alt : ing;
+
+        const sub = traceEvolutionPath(actualIng, currentBalls, new Set(visited), depth + 1);
+        if (!sub) return null; // broken path
+        totalMissing.push(...sub.missing);
+        if (sub.status !== "owned") {
+            steps.push(sub);
+        }
+    }
+
+    // Deduplicate missing
+    totalMissing = [...new Set(totalMissing)];
+
+    return {
+        ball: target,
+        tier: recipe.tier,
+        status: totalMissing.length === 0 ? "ready" : "reachable",
+        missing: totalMissing,
+        steps,
+        depth: depth + 1,
+        tips: recipe.tips || null,
+        difficulty: recipe.difficulty || null,
+        ingredients,
+        altMap,
+    };
+}
+
+// ─── PASSIVE↔BALL synergy analyzer ───
+function analyzePassiveBallSynergies(currentBalls, currentPassives) {
+    const activeSynergies = [];
+
+    for (const syn of PASSIVE_BALL_SYNERGIES) {
+        const ownedPassives = syn.passives.filter((p) => currentPassives.includes(p));
+        if (ownedPassives.length === 0) continue;
+
+        let matchedBalls = [];
+        if (syn.anyBall) {
+            matchedBalls = currentBalls.slice(0, 3); // generic synergy
+        } else {
+            // Match by ball name
+            matchedBalls = currentBalls.filter((b) => syn.balls.includes(b));
+            // Match by status effect
+            if (syn.effects.length > 0) {
+                for (const b of currentBalls) {
+                    if (matchedBalls.includes(b)) continue;
+                    const effs = getStatusEffects(b);
+                    if (effs.some((e) => syn.effects.includes(e))) matchedBalls.push(b);
+                }
+            }
+        }
+
+        const power = ownedPassives.length * (matchedBalls.length > 0 ? 2 : 0.5);
+        const suggestedBalls = syn.balls.filter((b) => !currentBalls.includes(b)).slice(0, 3);
+        const suggestedPassives = syn.passives.filter((p) => !currentPassives.includes(p)).slice(0, 2);
+
+        activeSynergies.push({
+            reason: syn.reason,
+            tier: syn.tier,
+            ownedPassives,
+            matchedBalls,
+            suggestedBalls,
+            suggestedPassives,
+            power,
+            active: matchedBalls.length > 0,
+        });
+    }
+
+    activeSynergies.sort((a, b) => b.power - a.power);
+    return activeSynergies.filter((s) => s.power > 0);
+}
+
+// ─── CHARACTER DYNAMIC SCORING ───
+function getCharacterBallBonus(charName, ballName) {
+    const mech = CHARACTER_MECHANICS[charName];
+    if (!mech) return { bonus: 0, reason: null, anti: false, antiReason: null };
+
+    const ball = ballsByName[ballName];
+    if (!ball) return { bonus: 0, reason: null, anti: false, antiReason: null };
+
+    let bonus = 0;
+    let reason = null;
+    let anti = false;
+    let antiReason = null;
+
+    const prefs = mech.ballPrefs;
+    // Speed match
+    if (prefs.speed && prefs.speed.includes(ball.speed)) {
+        bonus += mech.bonus;
+        reason = mech.reason;
+    }
+    // Effect match
+    if (prefs.effect) {
+        const ballEffects = getStatusEffects(ballName);
+        if (prefs.effect.some((e) => ballEffects.includes(e) || ball.name === e)) {
+            bonus += Math.round(mech.bonus * 0.8);
+            reason = reason || mech.reason;
+        }
+    }
+    // Category match
+    if (prefs.category && prefs.category.includes(ball.category)) {
+        bonus += Math.round(mech.bonus * 0.5);
+        reason = reason || mech.reason;
+    }
+
+    // Anti-synergy
+    const antiPrefs = mech.antiSynergy || {};
+    if (antiPrefs.speed && antiPrefs.speed.includes(ball.speed)) {
+        anti = true;
+        antiReason = mech.antiReason;
+    }
+    if (antiPrefs.effect) {
+        const ballEffects = getStatusEffects(ballName);
+        if (antiPrefs.effect.some((e) => ballEffects.includes(e))) {
+            anti = true;
+            antiReason = mech.antiReason;
+        }
+    }
+
+    return { bonus, reason, anti, antiReason };
+}
+
+// ─── EVOLUTION GRAPH DATA — for interactive visualization ───
+function buildEvolutionGraph(currentBalls) {
+    const nodes = [];
+    const edges = [];
+    const nodeSet = new Set();
+
+    // Add all current balls as nodes
+    for (const b of currentBalls) {
+        if (!nodeSet.has(b)) {
+            nodeSet.add(b);
+            const ball = ballsByName[b];
+            nodes.push({
+                id: b, label: b, status: "owned",
+                image: ball ? ball.image : getImagePath("balls", b),
+                isEvo: ball ? !!ball.is_evolution : false,
+                tier: null,
+            });
+        }
+    }
+
+    // Find all evolutions reachable (with limited depth)
+    const processedEvos = new Set();
+    function addEvoNodes(ballName, depth) {
+        if (depth > 3) return;
+        const evos = evosByIngredient[ballName] || [];
+        for (const evo of evos) {
+            if (processedEvos.has(evo.result_ball)) continue;
+            processedEvos.add(evo.result_ball);
+
+            const ings = [evo.ingredient_1, evo.ingredient_2];
+            if (evo.ingredient_3) ings.push(evo.ingredient_3);
+
+            const ownedIngs = ings.filter((i) => currentBalls.includes(i));
+            const missingIngs = ings.filter((i) => !currentBalls.includes(i));
+
+            let status = "unreachable";
+            if (missingIngs.length === 0) status = "ready";
+            else if (missingIngs.length === 1) status = "one-away";
+            else if (ownedIngs.length > 0) status = "partial";
+
+            // Add result node
+            if (!nodeSet.has(evo.result_ball)) {
+                nodeSet.add(evo.result_ball);
+                const resultBall = ballsByName[evo.result_ball];
+                nodes.push({
+                    id: evo.result_ball, label: evo.result_ball, status,
+                    image: evo.result_image || (resultBall ? resultBall.image : getImagePath("balls", evo.result_ball)),
+                    isEvo: true, tier: evo.tier, missing: missingIngs,
+                });
+            }
+
+            // Add missing ingredient nodes
+            for (const ing of missingIngs) {
+                if (!nodeSet.has(ing)) {
+                    nodeSet.add(ing);
+                    const ingBall = ballsByName[ing];
+                    nodes.push({
+                        id: ing, label: ing, status: "needed",
+                        image: ingBall ? ingBall.image : getImagePath("balls", ing),
+                        isEvo: ingBall ? !!ingBall.is_evolution : false, tier: null,
+                    });
+                }
+            }
+
+            // Add edges
+            for (const ing of ings) {
+                edges.push({ from: ing, to: evo.result_ball, owned: currentBalls.includes(ing) });
+            }
+
+            // Recurse for chain evolutions
+            addEvoNodes(evo.result_ball, depth + 1);
+        }
+    }
+
+    for (const b of currentBalls) addEvoNodes(b, 0);
+
+    return { nodes, edges };
+}
+
 function suggest() {
     const btn = $("#btn-suggest");
     btn.classList.add("loading");
@@ -640,6 +1009,21 @@ function computeSuggestions() {
             }
         }
 
+        // === Character dynamic scoring (wiki_ability mechanics) ===
+        if (character) {
+            for (const bbName of buildBalls) {
+                const charBonus = getCharacterBallBonus(character, bbName);
+                if (charBonus.bonus > 0) {
+                    score += charBonus.bonus;
+                    if (charBonus.reason) reasons.push(`🎮 ${charBonus.reason}`);
+                }
+                if (charBonus.anti) {
+                    score -= 10;
+                    if (charBonus.antiReason) reasons.push(`⚠️ ${charBonus.antiReason}`);
+                }
+            }
+        }
+
         // === Difficulty bonus (easier builds score slightly higher for accessibility) ===
         if (b.difficulty) {
             const diffBonus = { Easy: 5, Medium: 3, Hard: 0, "Very Hard": -3 };
@@ -775,6 +1159,39 @@ function computeSuggestions() {
         else if (dominantEffects[0] === "Lifesteal" || dominantEffects[0] === "Heal") statusAnalysis.suggestion = "Build Sustain : Nosferatu est l'évolution ultime, unkillable";
     }
 
+    // ─── Step 9: Evolution pathfinding (optimal routes to S+/S evolutions) ───
+    const evolutionPaths = findEvolutionPaths(currentBalls);
+
+    // ─── Step 10: Passive↔Ball synergy analysis ───
+    const passiveBallSynergies = analyzePassiveBallSynergies(currentBalls, currentPassives);
+
+    // ─── Step 11: Build evolution graph for visualization ───
+    const evolutionGraph = buildEvolutionGraph(currentBalls);
+
+    // ─── Step 12: Character-specific hints ───
+    let characterHints = null;
+    if (character && CHARACTER_MECHANICS[character]) {
+        const mech = CHARACTER_MECHANICS[character];
+        const goodBalls = currentBalls.filter((b) => {
+            const cb = getCharacterBallBonus(character, b);
+            return cb.bonus > 0;
+        });
+        const badBalls = currentBalls.filter((b) => {
+            const cb = getCharacterBallBonus(character, b);
+            return cb.anti;
+        });
+        // Suggest ideal balls the player doesn't have yet
+        const idealBalls = (mech.ballPrefs.effect || []).filter((e) => !currentBalls.includes(e) && ballsByName[e]);
+        characterHints = {
+            name: character,
+            desc: mech.desc,
+            goodBalls,
+            badBalls,
+            idealBalls: idealBalls.slice(0, 4),
+            antiReason: mech.antiReason,
+        };
+    }
+
     return {
         character: charInfo,
         current_balls: currentBalls,
@@ -785,6 +1202,10 @@ function computeSuggestions() {
         next_pickups: nextPickups,
         status_analysis: statusAnalysis,
         biome_synergy: biomeSynergy,
+        evolution_paths: evolutionPaths.slice(0, 8),
+        passive_ball_synergies: passiveBallSynergies.slice(0, 6),
+        evolution_graph: evolutionGraph,
+        character_hints: characterHints,
     };
 }
 
@@ -828,6 +1249,49 @@ function renderResults(data) {
                 ${strongTags ? `<div>✅ Efficace : ${strongTags}</div>` : ""}
                 ${weakTags ? `<div>❌ Résisté : ${weakTags}</div>` : ""}
             </div>
+        </div>`;
+    }
+
+    // Character hints card
+    if (data.character_hints) {
+        const ch = data.character_hints;
+        const goodHTML = ch.goodBalls.length > 0
+            ? `<div class="char-hint-row"><span class="char-hint-label">✅ Synergiques :</span> ${ch.goodBalls.map((b) => `<span class="effect-tag strong">${b}</span>`).join("")}</div>` : "";
+        const badHTML = ch.badBalls.length > 0
+            ? `<div class="char-hint-row"><span class="char-hint-label">⚠️ Sous-optimales :</span> ${ch.badBalls.map((b) => `<span class="effect-tag weak">${b}</span>`).join("")}${ch.antiReason ? `<small class="char-anti-reason">${ch.antiReason}</small>` : ""}</div>` : "";
+        const idealHTML = ch.idealBalls.length > 0
+            ? `<div class="char-hint-row"><span class="char-hint-label">🎯 Balles idéales à trouver :</span> ${ch.idealBalls.map((b) => `<span class="effect-tag">${b}</span>`).join("")}</div>` : "";
+        analysisSummary += `
+        <div class="analysis-card char-card">
+            <h4 class="analysis-title">🎮 ${ch.name}</h4>
+            <p class="analysis-desc">${ch.desc}</p>
+            ${goodHTML}${badHTML}${idealHTML}
+        </div>`;
+    }
+
+    // Passive↔Ball synergies
+    if (data.passive_ball_synergies && data.passive_ball_synergies.length > 0) {
+        let synHTML = data.passive_ball_synergies.map((syn) => {
+            const activeClass = syn.active ? "active" : "potential";
+            const matchedHTML = syn.matchedBalls.length > 0
+                ? `<span class="syn-matched">🎱 ${syn.matchedBalls.join(", ")}</span>` : "";
+            const sugBallsHTML = syn.suggestedBalls.length > 0
+                ? `<span class="syn-suggest">💡 Ajoute : ${syn.suggestedBalls.join(", ")}</span>` : "";
+            const sugPassHTML = syn.suggestedPassives.length > 0
+                ? `<span class="syn-suggest">🛡️ Cherche : ${syn.suggestedPassives.join(", ")}</span>` : "";
+            return `<div class="syn-item ${activeClass}">
+                <span class="syn-tier tier-${syn.tier.toLowerCase()}">${syn.tier}</span>
+                <div class="syn-body">
+                    <span class="syn-reason">${syn.reason}</span>
+                    <div class="syn-passives">🛡️ ${syn.ownedPassives.join(", ")}</div>
+                    ${matchedHTML}${sugBallsHTML}${sugPassHTML}
+                </div>
+            </div>`;
+        }).join("");
+        analysisSummary += `
+        <div class="analysis-card syn-card">
+            <h4 class="analysis-title">🔗 Synergies Passif ↔ Balle</h4>
+            <div class="syn-list">${synHTML}</div>
         </div>`;
     }
 
@@ -939,6 +1403,114 @@ function renderResults(data) {
         passiveEvosEl.classList.add("hidden");
     }
 
+    // ─── Evolution Paths (routes to S+/S evolutions) ───
+    const evoPathsEl = $("#evo-paths");
+    if (data.evolution_paths && data.evolution_paths.length > 0) {
+        evoPathsEl.classList.remove("hidden");
+        evoPathsEl.innerHTML = `
+            <h3 class="section-subtitle"><span class="icon">🗺️</span> Chemins d'Évolution Optimaux</h3>
+            <p class="section-hint">Routes les plus courtes vers les évolutions S+ et S depuis tes balles actuelles</p>
+            <div class="evo-paths-grid">
+                ${data.evolution_paths.map((path) => {
+                    const statusClass = path.status === "ready" ? "path-ready" : path.missing.length <= 1 ? "path-close" : "path-far";
+                    const missingHTML = path.missing.length > 0
+                        ? `<div class="path-missing">Manque : ${path.missing.map((m) => `<span class="effect-tag weak">${m}</span>`).join("")}</div>`
+                        : `<div class="path-ready-label">✅ Tous les ingrédients prêts !</div>`;
+                    const stepsHTML = path.steps.length > 0
+                        ? `<div class="path-steps">${renderPathSteps(path)}</div>` : "";
+                    const tipsHTML = path.tips ? `<div class="path-tips">💡 ${path.tips}</div>` : "";
+                    const diffHTML = path.difficulty ? `<span class="difficulty-badge diff-${path.difficulty.toLowerCase().replace(/ /g, "-")}">${path.difficulty}</span>` : "";
+                    return `
+                    <div class="path-card ${statusClass}">
+                        <div class="path-header">
+                            ${imgTag(getImagePath("balls", path.ball), path.ball, "✨")}
+                            <span class="path-target">${path.ball}</span>
+                            <span class="build-tier-badge tier-${(path.tier || "B").toLowerCase().replace('+', '-plus')}">${path.tier}</span>
+                            ${diffHTML}
+                            <span class="path-cost">${path.missing.length === 0 ? "Prêt!" : path.missing.length + " balle(s) manquante(s)"}</span>
+                        </div>
+                        ${missingHTML}
+                        ${stepsHTML}
+                        ${tipsHTML}
+                    </div>`;
+                }).join("")}
+            </div>`;
+    } else {
+        evoPathsEl.classList.add("hidden");
+    }
+
+    // ─── Interactive Evolution Graph ───
+    const evoGraphEl = $("#evo-graph");
+    if (data.evolution_graph && data.evolution_graph.nodes.length > 0) {
+        evoGraphEl.classList.remove("hidden");
+        const graph = data.evolution_graph;
+
+        // Group nodes by status for layered display
+        const ownedNodes = graph.nodes.filter((n) => n.status === "owned");
+        const readyNodes = graph.nodes.filter((n) => n.status === "ready");
+        const oneAwayNodes = graph.nodes.filter((n) => n.status === "one-away");
+        const partialNodes = graph.nodes.filter((n) => n.status === "partial");
+        const neededNodes = graph.nodes.filter((n) => n.status === "needed");
+
+        const renderGraphNode = (node) => {
+            const tierBadge = node.tier ? `<span class="graph-tier tier-${node.tier.toLowerCase().replace('+', '-plus')}">${node.tier}</span>` : "";
+            const missingHint = node.missing && node.missing.length > 0
+                ? `<span class="graph-missing">+${node.missing.join(", +")}</span>` : "";
+            return `
+            <div class="graph-node graph-${node.status}" data-ball="${node.id}" title="${node.id}">
+                ${imgTag(node.image, node.id, "⚪")}
+                <span class="graph-label">${node.label}</span>
+                ${tierBadge}${missingHint}
+            </div>`;
+        };
+
+        const renderLayer = (nodes, label, icon) => {
+            if (nodes.length === 0) return "";
+            return `<div class="graph-layer">
+                <div class="graph-layer-label">${icon} ${label} <span class="graph-count">(${nodes.length})</span></div>
+                <div class="graph-layer-nodes">${nodes.map(renderGraphNode).join("")}</div>
+            </div>`;
+        };
+
+        evoGraphEl.innerHTML = `
+            <h3 class="section-subtitle"><span class="icon">🌐</span> Graphe d'Évolution</h3>
+            <p class="section-hint">Toutes les évolutions accessibles depuis tes balles — regroupées par proximité</p>
+            <div class="graph-container">
+                ${renderLayer(ownedNodes, "Possédées", "🟢")}
+                ${renderLayer(readyNodes, "Prêtes à Fusionner", "⚡")}
+                ${renderLayer(oneAwayNodes, "1 Balle Manquante", "🟡")}
+                ${renderLayer(partialNodes, "Partiellement Atteignables", "🟠")}
+                ${renderLayer(neededNodes, "Ingrédients à Trouver", "🔴")}
+            </div>`;
+
+        // Add interactivity: click node to highlight edges
+        setTimeout(() => {
+            const graphNodes = evoGraphEl.querySelectorAll(".graph-node");
+            graphNodes.forEach((el) => {
+                el.addEventListener("click", () => {
+                    const ballName = el.dataset.ball;
+                    // Toggle highlight
+                    const wasActive = el.classList.contains("graph-active");
+                    graphNodes.forEach((n) => n.classList.remove("graph-active", "graph-connected"));
+                    if (!wasActive) {
+                        el.classList.add("graph-active");
+                        // Highlight connected nodes
+                        for (const edge of graph.edges) {
+                            if (edge.from === ballName || edge.to === ballName) {
+                                const other = edge.from === ballName ? edge.to : edge.from;
+                                graphNodes.forEach((n) => {
+                                    if (n.dataset.ball === other) n.classList.add("graph-connected");
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+        }, 0);
+    } else {
+        evoGraphEl.classList.add("hidden");
+    }
+
     // ─── Builds ───
     const buildsSection = $("#build-suggestions");
     if (data.recommended_builds && data.recommended_builds.length > 0) {
@@ -954,6 +1526,21 @@ function renderResults(data) {
     }
 
     resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// ─── Helper: render path steps recursively ───
+function renderPathSteps(path) {
+    if (!path.steps || path.steps.length === 0) return "";
+    return path.steps.map((step) => {
+        const statusIcon = step.status === "owned" ? "🟢" : step.status === "pickup" ? "🔴" : step.status === "ready" ? "⚡" : "🟡";
+        const subSteps = step.steps && step.steps.length > 0 ? `<div class="path-substeps">${renderPathSteps(step)}</div>` : "";
+        return `<div class="path-step">
+            <span class="path-step-icon">${statusIcon}</span>
+            <span class="path-step-name">${step.ball}</span>
+            ${step.tier ? `<span class="path-step-tier">[${step.tier}]</span>` : ""}
+            ${subSteps}
+        </div>`;
+    }).join('<span class="path-step-arrow">→</span>');
 }
 
 function renderBuildCard(build, idx) {

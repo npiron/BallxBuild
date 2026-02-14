@@ -1438,3 +1438,383 @@ body {
     margin-top: 3px;
     font-style: italic;
 }
+
+/* ═══════════════════════════════════════════════════
+   CHARACTER HINTS CARD
+   ═══════════════════════════════════════════════════ */
+.char-card {
+    border-left: 3px solid var(--accent-secondary);
+}
+
+.char-hint-row {
+    margin: 6px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+}
+
+.char-hint-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-right: 4px;
+}
+
+.char-anti-reason {
+    display: block;
+    width: 100%;
+    font-size: 0.62rem;
+    color: var(--danger);
+    margin-top: 2px;
+    font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════
+   PASSIVE ↔ BALL SYNERGY CARD
+   ═══════════════════════════════════════════════════ */
+.syn-card {
+    border-left: 3px solid #a78bfa;
+}
+
+.syn-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.syn-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.syn-item.active {
+    background: rgba(52, 211, 153, 0.06);
+    border-color: rgba(52, 211, 153, 0.15);
+}
+
+.syn-item.potential {
+    opacity: 0.75;
+}
+
+.syn-tier {
+    font-size: 0.55rem;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.syn-body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.syn-reason {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.syn-passives, .syn-matched {
+    font-size: 0.62rem;
+    color: var(--text-secondary);
+}
+
+.syn-suggest {
+    font-size: 0.6rem;
+    color: var(--accent);
+    font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════
+   EVOLUTION PATHS SECTION
+   ═══════════════════════════════════════════════════ */
+.evo-paths-section {
+    margin: 16px 0;
+}
+
+.evo-paths-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.path-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.path-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.path-card.path-ready {
+    border-color: var(--success);
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), var(--card-bg));
+}
+
+.path-card.path-close {
+    border-color: var(--warning);
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), var(--card-bg));
+}
+
+.path-card.path-far {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.path-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.path-header img {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.path-target {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.path-cost {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+.path-missing {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 6px 0;
+    align-items: center;
+}
+
+.path-ready-label {
+    font-size: 0.7rem;
+    color: var(--success);
+    font-weight: 600;
+    margin: 6px 0;
+}
+
+.path-steps {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin: 8px 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+}
+
+.path-step {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.65rem;
+}
+
+.path-step-icon {
+    font-size: 0.6rem;
+}
+
+.path-step-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.path-step-tier {
+    font-size: 0.55rem;
+    color: var(--accent);
+}
+
+.path-step-arrow {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    margin: 0 2px;
+}
+
+.path-substeps {
+    margin-left: 12px;
+    padding-left: 8px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 2px;
+}
+
+.path-tips {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════
+   INTERACTIVE EVOLUTION GRAPH
+   ═══════════════════════════════════════════════════ */
+.evo-graph-section {
+    margin: 16px 0;
+}
+
+.graph-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 8px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.graph-layer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.graph-layer-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.graph-count {
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.graph-layer-nodes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.graph-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    min-width: 70px;
+    text-align: center;
+    position: relative;
+}
+
+.graph-node:hover {
+    transform: scale(1.08);
+    z-index: 2;
+}
+
+.graph-node img, .graph-node .img-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.graph-label {
+    font-size: 0.55rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.graph-tier {
+    font-size: 0.45rem;
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
+.graph-missing {
+    font-size: 0.45rem;
+    color: var(--text-muted);
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Graph node status colors */
+.graph-owned {
+    background: rgba(52, 211, 153, 0.12);
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+.graph-ready {
+    background: rgba(52, 211, 153, 0.2);
+    border-color: var(--success);
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.2);
+    animation: readyPulse 2s ease-in-out infinite;
+}
+
+@keyframes readyPulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(52, 211, 153, 0.15); }
+    50% { box-shadow: 0 0 16px rgba(52, 211, 153, 0.35); }
+}
+
+.graph-one-away {
+    background: rgba(251, 191, 36, 0.1);
+    border-color: rgba(251, 191, 36, 0.3);
+}
+
+.graph-partial {
+    background: rgba(251, 146, 60, 0.08);
+    border-color: rgba(251, 146, 60, 0.2);
+}
+
+.graph-needed {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.15);
+    opacity: 0.7;
+}
+
+.graph-unreachable {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.06);
+    opacity: 0.5;
+}
+
+/* Interactive highlights */
+.graph-node.graph-active {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 16px rgba(139, 92, 246, 0.35);
+    transform: scale(1.12);
+    z-index: 5;
+}
+
+.graph-node.graph-connected {
+    border-color: var(--accent-secondary) !important;
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.25);
+    transform: scale(1.05);
+    z-index: 3;
+}
