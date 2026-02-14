@@ -1,1 +1,933 @@
-[{"id": 6, "result_ball": "Haemorrhage", "ingredient_1": "Bleed", "ingredient_2": "Iron", "tier": "S", "result_image": null, "ingredient_1_image": "img/balls/bleed.png", "ingredient_2_image": "img/balls/iron.png"}, {"id": 8, "result_ball": "Magma", "ingredient_1": "Burn", "ingredient_2": "Earthquake", "tier": "S", "result_image": "img/balls/magma.png", "ingredient_1_image": "img/balls/burn.png", "ingredient_2_image": "img/balls/earthquake.png"}, {"id": 9, "result_ball": "Frozen Flame", "ingredient_1": "Burn", "ingredient_2": "Freeze", "tier": "S", "result_image": "img/balls/frozen_flame.png", "ingredient_1_image": "img/balls/burn.png", "ingredient_2_image": "img/balls/freeze.png"}, {"id": 13, "result_ball": "Black Hole", "ingredient_1": "Dark", "ingredient_2": "The Sun", "tier": "S", "result_image": "img/balls/black_hole.png", "ingredient_1_image": "img/balls/dark.png", "ingredient_2_image": null}, {"id": 14, "result_ball": "Nuclear Bomb", "ingredient_1": "Bomb", "ingredient_2": "Poison", "tier": "S", "result_image": "img/balls/nuclear_bomb.png", "ingredient_1_image": "img/balls/bomb.png", "ingredient_2_image": "img/balls/poison.png"}, {"id": 15, "result_ball": "Satan", "ingredient_1": "Incubus", "ingredient_2": "Succubus", "tier": "S", "result_image": "img/balls/satan.png", "ingredient_1_image": "img/balls/incubus.png", "ingredient_2_image": "img/balls/succubus.png"}, {"id": 16, "result_ball": "Nosferatu", "ingredient_1": "Vampire Lord", "ingredient_2": "Mosquito King", "tier": "S", "result_image": "img/balls/nosferatu.png", "ingredient_1_image": "img/balls/vampire_lord.png", "ingredient_2_image": "img/balls/mosquito_king.png"}, {"id": 17, "result_ball": "Sandstorm", "ingredient_1": "Earthquake", "ingredient_2": "Wind", "tier": "S", "result_image": "img/balls/sandstorm.png", "ingredient_1_image": "img/balls/earthquake.png", "ingredient_2_image": "img/balls/wind.png"}, {"id": 19, "result_ball": "Holy Laser", "ingredient_1": "Laser (Vertical)", "ingredient_2": "Laser (Horizontal)", "tier": "S", "result_image": "img/balls/holy_laser.png", "ingredient_1_image": null, "ingredient_2_image": null}, {"id": 20, "result_ball": "The Sun", "ingredient_1": "Burn", "ingredient_2": "Light", "tier": "S", "result_image": null, "ingredient_1_image": "img/balls/burn.png", "ingredient_2_image": "img/balls/light.png"}, {"id": 21, "result_ball": "Mosquito King", "ingredient_1": "Brood Mother", "ingredient_2": "Vampire", "tier": "S", "result_image": "img/balls/mosquito_king.png", "ingredient_1_image": "img/balls/brood_mother.png", "ingredient_2_image": "img/balls/vampire.png"}, {"id": 1, "result_ball": "Vampire Lord", "ingredient_1": "Bleed", "ingredient_2": "Vampire", "tier": "A", "result_image": "img/balls/vampire_lord.png", "ingredient_1_image": "img/balls/bleed.png", "ingredient_2_image": "img/balls/vampire.png"}, {"id": 5, "result_ball": "Sacrifice", "ingredient_1": "Bleed", "ingredient_2": "Dark", "tier": "A", "result_image": "img/balls/sacrifice.png", "ingredient_1_image": "img/balls/bleed.png", "ingredient_2_image": "img/balls/dark.png"}, {"id": 7, "result_ball": "Bomb", "ingredient_1": "Burn", "ingredient_2": "Iron", "tier": "A", "result_image": "img/balls/bomb.png", "ingredient_1_image": "img/balls/burn.png", "ingredient_2_image": "img/balls/iron.png"}, {"id": 10, "result_ball": "Inferno", "ingredient_1": "Burn", "ingredient_2": "Wind", "tier": "A", "result_image": "img/balls/inferno.png", "ingredient_1_image": "img/balls/burn.png", "ingredient_2_image": "img/balls/wind.png"}, {"id": 11, "result_ball": "Incubus", "ingredient_1": "Charm", "ingredient_2": "Dark", "tier": "A", "result_image": "img/balls/incubus.png", "ingredient_1_image": "img/balls/charm.png", "ingredient_2_image": "img/balls/dark.png"}, {"id": 12, "result_ball": "Succubus", "ingredient_1": "Charm", "ingredient_2": "Vampire", "tier": "A", "result_image": "img/balls/succubus.png", "ingredient_1_image": "img/balls/charm.png", "ingredient_2_image": "img/balls/vampire.png"}, {"id": 18, "result_ball": "Blizzard", "ingredient_1": "Freeze", "ingredient_2": "Wind", "tier": "A", "result_image": "img/balls/blizzard.png", "ingredient_1_image": "img/balls/freeze.png", "ingredient_2_image": "img/balls/wind.png"}, {"id": 22, "result_ball": "Spider Queen", "ingredient_1": "Brood Mother", "ingredient_2": "Egg Sac", "tier": "A", "result_image": "img/balls/spider_queen.png", "ingredient_1_image": "img/balls/brood_mother.png", "ingredient_2_image": "img/balls/egg_sac.png"}, {"id": 23, "result_ball": "Lightning Rod", "ingredient_1": "Iron", "ingredient_2": "Lightning", "tier": "A", "result_image": "img/balls/lightning_rod.png", "ingredient_1_image": "img/balls/iron.png", "ingredient_2_image": "img/balls/lightning.png"}, {"id": 2, "result_ball": "Leech", "ingredient_1": "Bleed", "ingredient_2": "Brood Mother", "tier": "B", "result_image": "img/balls/leech.png", "ingredient_1_image": "img/balls/bleed.png", "ingredient_2_image": "img/balls/brood_mother.png"}, {"id": 3, "result_ball": "Virus", "ingredient_1": "Bleed", "ingredient_2": "Poison", "tier": "B", "result_image": "img/balls/virus.png", "ingredient_1_image": "img/balls/bleed.png", "ingredient_2_image": "img/balls/poison.png"}, {"id": 4, "result_ball": "Berserk", "ingredient_1": "Bleed", "ingredient_2": "Charm", "tier": "B", "result_image": "img/balls/berserk.png", "ingredient_1_image": "img/balls/bleed.png", "ingredient_2_image": "img/balls/charm.png"}, {"id": 24, "result_ball": "Steel", "ingredient_1": "Iron", "ingredient_2": "Earthquake", "tier": "B", "result_image": "img/balls/steel.png", "ingredient_1_image": "img/balls/iron.png", "ingredient_2_image": "img/balls/earthquake.png"}, {"id": 25, "result_ball": "Swamp", "ingredient_1": "Earthquake", "ingredient_2": "Poison", "tier": "B", "result_image": "img/balls/swamp.png", "ingredient_1_image": "img/balls/earthquake.png", "ingredient_2_image": "img/balls/poison.png"}]
+[
+  {
+    "id": 112,
+    "result_ball": "Black Hole",
+    "recipe": "Dark + Sun",
+    "ingredients": [
+      "Sun (Burn + Light)",
+      "Dark"
+    ],
+    "tier": "S+",
+    "difficulty": "Hard",
+    "tips": "Ultimate end-game fusion. Requires Sun first.",
+    "category": "advanced",
+    "result_image": "img/balls/black_hole.png",
+    "ingredient_1": "Dark",
+    "ingredient_2": "Sun",
+    "wiki_combination": "Dark+Sun",
+    "wiki_description": "Instantly kills the first non-boss enemy that it hits, but destroys itself afterwards. Has a 7 second cooldown before it can be shot again"
+  },
+  {
+    "id": 7,
+    "result_ball": "Bomb",
+    "recipe": "Burn + Iron",
+    "ingredients": [
+      "Burn",
+      "Iron"
+    ],
+    "tier": "S+",
+    "difficulty": "Easy",
+    "tips": "One of the most powerful early fusions. Always prioritize this combo.",
+    "category": "basic",
+    "result_image": "img/balls/bomb.png",
+    "ingredient_1": "Burn",
+    "ingredient_2": "Iron",
+    "wiki_combination": "Burn+Iron",
+    "wiki_description": "Explodes when hitting an enemy, dealing 150-300 damage to nearby enemies. Has a 3 second cooldown before it can be shot again"
+  },
+  {
+    "id": 124,
+    "result_ball": "Nosferatu",
+    "recipe": "Vampire Lord + Spider Queen + Mosquito King",
+    "ingredients": [
+      "Vampire Lord (Vampire + Dark)",
+      "Mosquito King (Vampire + Insect)",
+      "Spider Queen (Vampire + Poison)"
+    ],
+    "tier": "S+",
+    "difficulty": "Extreme",
+    "tips": "Most complex fusion. Requires three pre-evolved vampire balls. Ultimate challenge.",
+    "category": "triple",
+    "result_image": "img/balls/nosferatu.png",
+    "ingredient_1": "Vampire Lord",
+    "ingredient_2": "Spider Queen",
+    "ingredient_3": "Mosquito King",
+    "wiki_combination": "Vampire Lord+Spider Queen+Mosquito King",
+    "wiki_description": "Spawns a vampire bat each bounce. Vampire bats fly towards a random enemy, dealing 132-176 damage on hit, turning into a Vampire Lord"
+  },
+  {
+    "id": 115,
+    "result_ball": "Satan",
+    "recipe": "Incubus + Succubus",
+    "ingredients": [
+      "Incubus (Charm + Dark)",
+      "Succubus (Charm + Vampire)"
+    ],
+    "tier": "S+",
+    "difficulty": "Very Hard",
+    "tips": "Requires two pre-evolutions. Extremely powerful.",
+    "category": "advanced",
+    "result_image": "img/balls/satan.png",
+    "ingredient_1": "Incubus",
+    "ingredient_2": "Succubus",
+    "wiki_combination": "Incubus+Succubus",
+    "wiki_description": "While active, add 1 stack of burn to all active enemies per second (max 5 stacks), dealing 10-20 damage per stack per second and make them go berserk, dealing 15-24 damage to adjacent enemies every second"
+  },
+  {
+    "id": 114,
+    "result_ball": "Blizzard",
+    "recipe": "Freeze + Light or Wind",
+    "ingredients": [
+      "Ice Spike (Water + Wind)",
+      "Earthquake"
+    ],
+    "tier": "S",
+    "difficulty": "Medium",
+    "tips": "Freezes multiple enemies. Huge AoE.",
+    "category": "advanced",
+    "result_image": "img/balls/blizzard.png",
+    "ingredient_1": "Freeze",
+    "ingredient_2": "Light",
+    "wiki_combination": "Freeze+ (WindorLightning)",
+    "wiki_description": "Freezes all enemies within a 2 tile radius for 0.8 seconds, dealing 1-50 damage",
+    "ingredient_2_alt": "Wind"
+  },
+  {
+    "id": 8,
+    "result_ball": "Magma",
+    "recipe": "Burn + Earthquake",
+    "ingredients": [
+      "Burn",
+      "Earthquake"
+    ],
+    "tier": "S",
+    "difficulty": "Medium",
+    "tips": "Top meta fusion for 2025. Continuous area damage.",
+    "category": "basic",
+    "result_image": "img/balls/magma.png",
+    "ingredient_1": "Burn",
+    "ingredient_2": "Earthquake",
+    "wiki_combination": "Burn+Earthquake",
+    "wiki_description": "Emits lava blobs over time. Enemies who walk into lava blobs are dealt 15-30 damage and gain 1 stack of burn (max 3 stacks). Burn lasts for 3 seconds, dealing 3-8 damage per stack per second. This ball and its lava blobs also deal 6-12 damage to nearby units"
+  },
+  {
+    "id": 111,
+    "result_ball": "Nuclear Bomb",
+    "recipe": "Bomb + Poison",
+    "ingredients": [
+      "Bomb (Burn + Iron)",
+      "Poison"
+    ],
+    "tier": "S",
+    "difficulty": "Medium",
+    "tips": "Requires Bomb evolution first. Adds poison DoT.",
+    "category": "advanced",
+    "result_image": "img/balls/nuclear_bomb.png",
+    "ingredient_1": "Bomb",
+    "ingredient_2": "Poison",
+    "wiki_combination": "Bomb+Poison",
+    "wiki_description": "Explodes when hitting an enemy, dealing 300-500 damage to nearby enemies and applying 1 stack of radiation to everyone present indefinitely (max 5 stacks). Each stack of radiation increases damage received by 10%. Has a 3 second cooldown"
+  },
+  {
+    "id": 128,
+    "result_ball": "Sandstorm",
+    "recipe": "Earthquake or Stone + Wind",
+    "ingredients": [
+      "Earthquake",
+      "Wind"
+    ],
+    "tier": "S",
+    "difficulty": "Medium",
+    "tips": "Excellent area control. Perfect for current meta.",
+    "category": "elemental",
+    "result_image": "img/balls/sandstorm.png",
+    "ingredient_1": "Earthquake",
+    "ingredient_2": "Wind",
+    "wiki_combination": "(EarthquakeorStone (Ball)) +Wind",
+    "wiki_description": "Goes through enemies and is surrounded by a raging storm dealing 10-20 damage per second and blinding nearby enemies for 3 seconds",
+    "ingredient_1_alt": "Stone"
+  },
+  {
+    "id": 113,
+    "result_ball": "Storm",
+    "recipe": "Light + Wind",
+    "ingredients": [
+      "Thunder (Light + Wind)",
+      "Water"
+    ],
+    "tier": "S",
+    "difficulty": "Medium",
+    "tips": "Enhanced thunder with massive chain damage.",
+    "category": "advanced",
+    "result_image": "img/balls/storm.png",
+    "ingredient_1": "Light",
+    "ingredient_2": "Wind",
+    "wiki_combination": "Lightning+Wind",
+    "wiki_description": "Emits lightning to strike nearby enemies every second, dealing 1-40 damage"
+  },
+  {
+    "id": 102,
+    "result_ball": "Sun",
+    "recipe": "Burn + Light",
+    "ingredients": [
+      "Burn",
+      "Light"
+    ],
+    "tier": "S",
+    "difficulty": "Easy",
+    "tips": "Gateway to Black Hole. Essential for end-game builds.",
+    "category": "basic",
+    "result_image": "img/balls/sun.png",
+    "ingredient_1": "Burn",
+    "ingredient_2": "Light",
+    "wiki_combination": "Burn+Light",
+    "wiki_description": "Blind all enemies in view and add 1 stack of burn every second (max 5 stacks). Burn lasts for 6 seconds and deals 6-12 damage per stack per second"
+  },
+  {
+    "id": 119,
+    "result_ball": "Holy Laser",
+    "recipe": "Laser (Horizontal) + Laser (Vertical)",
+    "ingredients": [
+      "Light",
+      "Light"
+    ],
+    "tier": "A",
+    "difficulty": "Easy",
+    "tips": "Pure light damage. Pierces multiple enemies.",
+    "category": "double",
+    "result_image": "img/balls/holy_laser.png",
+    "ingredient_1": "Laser (Horizontal)",
+    "ingredient_2": "Laser (Vertical)",
+    "wiki_combination": "Laser (Horizontal)+Laser (Vertical)",
+    "wiki_description": "Deals 24-36 damage to all enemies in the same row and column"
+  },
+  {
+    "id": 11,
+    "result_ball": "Incubus",
+    "recipe": "Charm + Dark",
+    "ingredients": [
+      "Charm",
+      "Dark"
+    ],
+    "tier": "A",
+    "difficulty": "Medium",
+    "tips": "Pre-evolution for Satan. Strong on its own.",
+    "category": "basic",
+    "result_image": "img/balls/incubus.png",
+    "ingredient_1": "Charm",
+    "ingredient_2": "Dark",
+    "wiki_combination": "Charm+Dark",
+    "wiki_description": "Each hit has a 4% chance of charming the enemy for 9 seconds. Charmed enemies curse nearby enemies. Cursed enemies are dealt 100-200 after being hit 5 times"
+  },
+  {
+    "id": 117,
+    "result_ball": "Mosquito King",
+    "recipe": "Vampire + Brood Mother",
+    "ingredients": [
+      "Vampire",
+      "Insect"
+    ],
+    "tier": "A",
+    "difficulty": "Hard",
+    "tips": "Pre-evolution for Nosferatu. Drains health.",
+    "category": "advanced",
+    "result_image": "img/balls/mosquito_king.png",
+    "ingredient_1": "Vampire",
+    "ingredient_2": "Brood Mother",
+    "wiki_combination": "Vampire+Brood Mother",
+    "wiki_description": "Spawns a mosquito each time it hits an enemy. Mosquitos attack a random enemy, dealing 80-120 damage each. If a mosquito kills an enemy, they steal 1 health"
+  },
+  {
+    "id": 118,
+    "result_ball": "Spider Queen",
+    "recipe": "Brood Mother + Egg Sac",
+    "ingredients": [
+      "Vampire",
+      "Poison"
+    ],
+    "tier": "A",
+    "difficulty": "Hard",
+    "tips": "Pre-evolution for Nosferatu. Poison DoT.",
+    "category": "advanced",
+    "result_image": "img/balls/spider_queen.png",
+    "ingredient_1": "Brood Mother",
+    "ingredient_2": "Egg Sac",
+    "wiki_combination": "Brood Mother+Egg Sac",
+    "wiki_description": "Has a 25% chance of birthing an Egg Sac each time it hits an enemy"
+  },
+  {
+    "id": 121,
+    "result_ball": "Steel",
+    "recipe": "Iron + Stone",
+    "ingredients": [
+      "Iron",
+      "Iron"
+    ],
+    "tier": "A",
+    "difficulty": "Easy",
+    "tips": "Increases defense while attacking.",
+    "category": "double",
+    "result_image": "img/balls/steel.png",
+    "ingredient_1": "Iron",
+    "ingredient_2": "Stone",
+    "wiki_combination": "Iron+Stone",
+    "wiki_description": "Initially deals double damage but moves 50% slower. Damage increases by 10% each time it hits an enemy (max 300%)."
+  },
+  {
+    "id": 12,
+    "result_ball": "Succubus",
+    "recipe": "Charm + Vampire",
+    "ingredients": [
+      "Charm",
+      "Vampire"
+    ],
+    "tier": "A",
+    "difficulty": "Medium",
+    "tips": "Pre-evolution for Satan. Provides lifesteal.",
+    "category": "basic",
+    "result_image": "img/balls/succubus.png",
+    "ingredient_1": "Charm",
+    "ingredient_2": "Vampire",
+    "wiki_combination": "Charm+Vampire",
+    "wiki_description": "Each hit has a 4% chance of charming the enemy for 9 seconds. Heals 1 when hitting a charmed enemy"
+  },
+  {
+    "id": 116,
+    "result_ball": "Vampire Lord",
+    "recipe": "Vampire + Bleed or Dark",
+    "ingredients": [
+      "Vampire",
+      "Dark"
+    ],
+    "tier": "A",
+    "difficulty": "Hard",
+    "tips": "Pre-evolution for Nosferatu. Strong lifesteal.",
+    "category": "advanced",
+    "result_image": "img/balls/vampire_lord.png",
+    "ingredient_1": "Vampire",
+    "ingredient_2": "Bleed",
+    "wiki_combination": "Vampire+ (BleedorDark)",
+    "wiki_description": "Each hit inflicts 3 stacks of bleed. Heals 1 health and consumes all stacks when hitting an enemy with at least 10 stacks of bleed",
+    "ingredient_2_alt": "Dark"
+  },
+  {
+    "id": 131,
+    "result_ball": "Assassin",
+    "recipe": "Iron + Ghost or Dark",
+    "ingredients": [
+      "Iron",
+      "Ghost or Dark"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Passes through the front of enemies, but not the back. Backstabs deal 30% bonus damage.",
+    "category": "advanced",
+    "result_image": "img/balls/assassin.png",
+    "ingredient_1": "Iron",
+    "ingredient_2": "Ghost",
+    "wiki_combination": "Iron+ (GhostorDark)",
+    "wiki_description": "Passes through the front of enemies, but not the back. Backstabs deal 30% bonus damage.",
+    "source": "wiki",
+    "ingredient_2_alt": "Dark"
+  },
+  {
+    "id": 132,
+    "result_ball": "Banished Flame",
+    "recipe": "Dark + Burn",
+    "ingredients": [
+      "Dark",
+      "Burn"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Add 1 stack of darkflame on hit for 2 seconds (max 6 stacks). Darkflame deals 1-30 damage per stack per second. When the darkflame goes out, it deals 1-100 to the enemy.",
+    "category": "basic",
+    "result_image": "img/balls/banished_flame.png",
+    "ingredient_1": "Dark",
+    "ingredient_2": "Burn",
+    "wiki_combination": "Dark+Burn",
+    "wiki_description": "Add 1 stack of darkflame on hit for 2 seconds (max 6 stacks). Darkflame deals 1-30 damage per stack per second. When the darkflame goes out, it deals 1-100 to the enemy.",
+    "source": "wiki"
+  },
+  {
+    "id": 133,
+    "result_ball": "Berserk",
+    "recipe": "Charm + Bleed or Burn",
+    "ingredients": [
+      "Charm",
+      "Bleed or Burn"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Each hit has a 30% chance of causing enemies to go berserk for 6 seconds. Berserk enemies deal 15-24 damage to adjacent enemies every second",
+    "category": "advanced",
+    "result_image": "img/balls/berserk.png",
+    "ingredient_1": "Charm",
+    "ingredient_2": "Bleed",
+    "wiki_combination": "Charm+ (BleedorBurn)",
+    "wiki_description": "Each hit has a 30% chance of causing enemies to go berserk for 6 seconds. Berserk enemies deal 15-24 damage to adjacent enemies every second",
+    "source": "wiki",
+    "ingredient_2_alt": "Burn"
+  },
+  {
+    "id": 134,
+    "result_ball": "Brimstone",
+    "recipe": "Poison or Stone + Burn",
+    "ingredients": [
+      "Stone or Poison",
+      "Burn"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Applies 1 stack of burn and poison every second to all enemies within a 2 tile radius (max 4 stacks). Burn deals 1-4 damage per stack per second and poison deals 2-3 damage per stack per second.",
+    "category": "advanced",
+    "result_image": "img/balls/brimstone.png",
+    "ingredient_1": "Poison",
+    "ingredient_2": "Burn",
+    "wiki_combination": "(StoneorPoison) +Burn",
+    "wiki_description": "Applies 1 stack of burn and poison every second to all enemies within a 2 tile radius (max 4 stacks). Burn deals 1-4 damage per stack per second and poison deals 2-3 damage per stack per second.",
+    "source": "wiki",
+    "ingredient_1_alt": "Stone"
+  },
+  {
+    "id": 135,
+    "result_ball": "Catapult",
+    "recipe": "Stone + Egg Sac",
+    "ingredients": [
+      "Stone",
+      "Egg Sac"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Launches 3-5 stone baby balls every 1.5 seconds, which are destroyed after hitting anything.",
+    "category": "basic",
+    "result_image": "img/balls/catapult.png",
+    "ingredient_1": "Stone",
+    "ingredient_2": "Egg Sac",
+    "wiki_combination": "Stone+Egg Sac",
+    "wiki_description": "Launches 3-5 stone baby balls every 1.5 seconds, which are destroyed after hitting anything.",
+    "source": "wiki"
+  },
+  {
+    "id": 136,
+    "result_ball": "Fireworks",
+    "recipe": "Burn + Egg Sac",
+    "ingredients": [
+      "Burn",
+      "Egg Sac"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Explodes into 3-6 fireworks. Fireworks target random enemies, dealing 20-30 damage and applying 1 stack of burn. Burnt units are dealt 7-11 damage per stack per second.",
+    "category": "basic",
+    "result_image": "img/balls/fireworks.png",
+    "ingredient_1": "Burn",
+    "ingredient_2": "Egg Sac",
+    "wiki_combination": "Burn+Egg Sac",
+    "wiki_description": "Explodes into 3-6 fireworks. Fireworks target random enemies, dealing 20-30 damage and applying 1 stack of burn. Burnt units are dealt 7-11 damage per stack per second.",
+    "source": "wiki"
+  },
+  {
+    "id": 137,
+    "result_ball": "Flash",
+    "recipe": "Light + Light",
+    "ingredients": [
+      "Lightning",
+      "Light"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Damage all enemies on screen for 1-3 damage after hitting an enemy and blind them for 2 seconds",
+    "category": "basic",
+    "result_image": "img/balls/flash.png",
+    "ingredient_1": "Light",
+    "ingredient_2": "Light",
+    "wiki_combination": "Lightning+Light",
+    "wiki_description": "Damage all enemies on screen for 1-3 damage after hitting an enemy and blind them for 2 seconds",
+    "source": "wiki"
+  },
+  {
+    "id": 138,
+    "result_ball": "Flicker",
+    "recipe": "Light + Dark",
+    "ingredients": [
+      "Light",
+      "Dark"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Deals 1-7 damage to every enemy on screen every 1.4 seconds",
+    "category": "basic",
+    "result_image": "img/balls/flicker.png",
+    "ingredient_1": "Light",
+    "ingredient_2": "Dark",
+    "wiki_combination": "Light+Dark",
+    "wiki_description": "Deals 1-7 damage to every enemy on screen every 1.4 seconds",
+    "source": "wiki"
+  },
+  {
+    "id": 139,
+    "result_ball": "Freeze Ray",
+    "recipe": "Freeze + Laser (Horizontal) or Laser (Vertical)",
+    "ingredients": [
+      "Freeze",
+      "Laser (H or izontal) or Laser (Vertical)"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Emits a freeze ray when hitting an enemy, dealing 20-50 to all enemies in its path, with a 10% chance of freezing them for 10.0 seconds",
+    "category": "advanced",
+    "result_image": "img/balls/freeze_ray.png",
+    "ingredient_1": "Freeze",
+    "ingredient_2": "Laser (Horizontal)",
+    "wiki_combination": "Freeze+ (Laser (Horizontal)orLaser (Vertical))",
+    "wiki_description": "Emits a freeze ray when hitting an enemy, dealing 20-50 to all enemies in its path, with a 10% chance of freezing them for 10.0 seconds",
+    "source": "wiki",
+    "ingredient_2_alt": "Laser (Vertical)"
+  },
+  {
+    "id": 140,
+    "result_ball": "Frozen Flame",
+    "recipe": "Burn + Freeze",
+    "ingredients": [
+      "Burn",
+      "Freeze"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Add 1 stack of frostburn on hit for 20 seconds (max 4 stacks). Frostburnt units are dealt 8-12 damage per stack per second and receive 25% more damage from other sources",
+    "category": "basic",
+    "result_image": "img/balls/frozen_flame.png",
+    "ingredient_1": "Burn",
+    "ingredient_2": "Freeze",
+    "wiki_combination": "Burn+Freeze",
+    "wiki_description": "Add 1 stack of frostburn on hit for 20 seconds (max 4 stacks). Frostburnt units are dealt 8-12 damage per stack per second and receive 25% more damage from other sources",
+    "source": "wiki"
+  },
+  {
+    "id": 141,
+    "result_ball": "Glacier",
+    "recipe": "Freeze + Earthquake or Stone",
+    "ingredients": [
+      "Freeze",
+      "Earthquake or Stone (Ball)"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Releases glacial spikes over time that deal 15-30 to enemies that touch them and freeze them for 2.0 seconds. This ball and its glacial spikes also deal 6-12 damage to nearby units",
+    "category": "advanced",
+    "result_image": "img/balls/glacier.png",
+    "ingredient_1": "Freeze",
+    "ingredient_2": "Earthquake",
+    "wiki_combination": "Freeze+ (EarthquakeorStone (Ball))",
+    "wiki_description": "Releases glacial spikes over time that deal 15-30 to enemies that touch them and freeze them for 2.0 seconds. This ball and its glacial spikes also deal 6-12 damage to nearby units",
+    "source": "wiki",
+    "ingredient_2_alt": "Stone"
+  },
+  {
+    "id": 142,
+    "result_ball": "Hemorrhage",
+    "recipe": "Bleed + Iron",
+    "ingredients": [
+      "Bleed",
+      "Iron"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Inflicts 3 stacks of bleed. When hitting an enemy with 12 stacks of bleed or more, consumes all stacks of bleed to deal 20% of their current health",
+    "category": "basic",
+    "result_image": "img/balls/hemorrhage.png",
+    "ingredient_1": "Bleed",
+    "ingredient_2": "Iron",
+    "wiki_combination": "Bleed+Iron",
+    "wiki_description": "Inflicts 3 stacks of bleed. When hitting an enemy with 12 stacks of bleed or more, consumes all stacks of bleed to deal 20% of their current health",
+    "source": "wiki"
+  },
+  {
+    "id": 143,
+    "result_ball": "Inferno",
+    "recipe": "Burn + Wind",
+    "ingredients": [
+      "Burn",
+      "Wind"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Applies 1 stack of burn every second to all enemies within a 2 tile radius. Burn lasts for 6 seconds, dealing 3-7 damage per stack per seconds",
+    "category": "basic",
+    "result_image": "img/balls/inferno.png",
+    "ingredient_1": "Burn",
+    "ingredient_2": "Wind",
+    "wiki_combination": "Burn+Wind",
+    "wiki_description": "Applies 1 stack of burn every second to all enemies within a 2 tile radius. Burn lasts for 6 seconds, dealing 3-7 damage per stack per seconds",
+    "source": "wiki"
+  },
+  {
+    "id": 144,
+    "result_ball": "Landslide",
+    "recipe": "Stone + Earthquake",
+    "ingredients": [
+      "Stone",
+      "Earthquake"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Creates a landslide and destroys self upon hitting an enemy. The landslide lasts for 5 seconds and deals 20-30 damage per second to enemies within a 2 tile radius",
+    "category": "basic",
+    "result_image": "img/balls/landslide.png",
+    "ingredient_1": "Stone",
+    "ingredient_2": "Earthquake",
+    "wiki_combination": "Stone+Earthquake",
+    "wiki_description": "Creates a landslide and destroys self upon hitting an enemy. The landslide lasts for 5 seconds and deals 20-30 damage per second to enemies within a 2 tile radius",
+    "source": "wiki"
+  },
+  {
+    "id": 145,
+    "result_ball": "Laser Beam",
+    "recipe": "Light + Laser (Horizontal) or Laser (Vertical)",
+    "ingredients": [
+      "Light",
+      "Laser (H or izontal) or Laser (Vertical)"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Emit a laser beam on hit that deals 30-42 damage and blinds enemies for 8 seconds",
+    "category": "advanced",
+    "result_image": "img/balls/laser_beam.png",
+    "ingredient_1": "Light",
+    "ingredient_2": "Laser (Horizontal)",
+    "wiki_combination": "Light+ (Laser (Horizontal)orLaser (Vertical))",
+    "wiki_description": "Emit a laser beam on hit that deals 30-42 damage and blinds enemies for 8 seconds",
+    "source": "wiki",
+    "ingredient_2_alt": "Laser (Vertical)"
+  },
+  {
+    "id": 146,
+    "result_ball": "Laser Cutter",
+    "recipe": "Laser (Horizontal) or Laser (Vertical) + Steel",
+    "ingredients": [
+      "Laser (H or izontal) or Laser (Vertical)",
+      "Steel"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Constantly emits a laser in front of it, which deals 100-150 damage per second.",
+    "category": "advanced",
+    "result_image": "img/balls/laser_cutter.png",
+    "ingredient_1": "Laser (Horizontal)",
+    "ingredient_2": "Steel",
+    "wiki_combination": "(Laser (Horizontal)orLaser (Vertical)) +Steel",
+    "wiki_description": "Constantly emits a laser in front of it, which deals 100-150 damage per second.",
+    "source": "wiki",
+    "ingredient_1_alt": "Laser (Vertical)"
+  },
+  {
+    "id": 147,
+    "result_ball": "Leech",
+    "recipe": "Brood Mother + Bleed",
+    "ingredients": [
+      "Brood Mother",
+      "Bleed"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Attaches up to 1 leech onto enemies it hits, which add 2 stacks of bleed per seconds (max 24 stacks)",
+    "category": "basic",
+    "result_image": "img/balls/leech.png",
+    "ingredient_1": "Brood Mother",
+    "ingredient_2": "Bleed",
+    "wiki_combination": "Brood Mother+Bleed",
+    "wiki_description": "Attaches up to 1 leech onto enemies it hits, which add 2 stacks of bleed per seconds (max 24 stacks)",
+    "source": "wiki"
+  },
+  {
+    "id": 148,
+    "result_ball": "Lightning Rod",
+    "recipe": "Light + Iron",
+    "ingredients": [
+      "Lightning",
+      "Iron"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Plants a lightning rod into enemies it hits. These enemies are struck by lightning every 3.0 seconds, dealing 1-30 damage to up to 8 nearby enemies",
+    "category": "basic",
+    "result_image": "img/balls/lightning_rod.png",
+    "ingredient_1": "Light",
+    "ingredient_2": "Iron",
+    "wiki_combination": "Lightning+Iron",
+    "wiki_description": "Plants a lightning rod into enemies it hits. These enemies are struck by lightning every 3.0 seconds, dealing 1-30 damage to up to 8 nearby enemies",
+    "source": "wiki"
+  },
+  {
+    "id": 149,
+    "result_ball": "Lovestruck",
+    "recipe": "Charm + Lightning or Light",
+    "ingredients": [
+      "Charm",
+      "Light or Lightning"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Inflicts lovestruck on hit enemies for 20 seconds. Lovestruck units have a 50% chance of healing you for 5 health when they attack",
+    "category": "advanced",
+    "result_image": "img/balls/lovestruck.png",
+    "ingredient_1": "Charm",
+    "ingredient_2": "Lightning",
+    "wiki_combination": "Charm+ (LightorLightning)",
+    "wiki_description": "Inflicts lovestruck on hit enemies for 20 seconds. Lovestruck units have a 50% chance of healing you for 5 health when they attack",
+    "source": "wiki",
+    "ingredient_2_alt": "Light"
+  },
+  {
+    "id": 150,
+    "result_ball": "Maggot",
+    "recipe": "Brood Mother + Cell",
+    "ingredients": [
+      "Brood Mother",
+      "Cell"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Infest enemies on hit with maggots. When they dies, they explode into 1-2 baby balls",
+    "category": "basic",
+    "result_image": "img/balls/maggot.png",
+    "ingredient_1": "Brood Mother",
+    "ingredient_2": "Cell",
+    "wiki_combination": "Brood Mother+Cell",
+    "wiki_description": "Infest enemies on hit with maggots. When they dies, they explode into 1-2 baby balls",
+    "source": "wiki"
+  },
+  {
+    "id": 151,
+    "result_ball": "Mosquito Swarm",
+    "recipe": "Vampire + Egg Sac",
+    "ingredients": [
+      "Vampire",
+      "Egg Sac"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Explodes into 3-6 mosquitos. Mosquitos attack random enemies, dealing 80-120 damage each. If a mosquito kills an enemy, they steal 1 health",
+    "category": "basic",
+    "result_image": "img/balls/mosquito_swarm.png",
+    "ingredient_1": "Vampire",
+    "ingredient_2": "Egg Sac",
+    "wiki_combination": "Vampire+Egg Sac",
+    "wiki_description": "Explodes into 3-6 mosquitos. Mosquitos attack random enemies, dealing 80-120 damage each. If a mosquito kills an enemy, they steal 1 health",
+    "source": "wiki"
+  },
+  {
+    "id": 152,
+    "result_ball": "Noxious",
+    "recipe": "Wind + Poison or Dark",
+    "ingredients": [
+      "Wind",
+      "Poison or Dark"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Passes through enemies and applies 3 stacks of poison to nearby enemies within a 2 tile radius. Poison lasts for 4 seconds and each stack deals 1-3 damage per second",
+    "category": "advanced",
+    "result_image": "img/balls/noxious.png",
+    "ingredient_1": "Wind",
+    "ingredient_2": "Poison",
+    "wiki_combination": "Wind+ (PoisonorDark)",
+    "wiki_description": "Passes through enemies and applies 3 stacks of poison to nearby enemies within a 2 tile radius. Poison lasts for 4 seconds and each stack deals 1-3 damage per second",
+    "source": "wiki",
+    "ingredient_2_alt": "Dark"
+  },
+  {
+    "id": 153,
+    "result_ball": "Overgrowth",
+    "recipe": "Earthquake + Cell",
+    "ingredients": [
+      "Earthquake",
+      "Cell"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Applies 1 stack of overgrowth. Upon reaching 3, consume all stacks and deal 150-200 damage to all enemies in a 3x3 tile square",
+    "category": "basic",
+    "result_image": "img/balls/overgrowth.png",
+    "ingredient_1": "Earthquake",
+    "ingredient_2": "Cell",
+    "wiki_combination": "Earthquake+Cell",
+    "wiki_description": "Applies 1 stack of overgrowth. Upon reaching 3, consume all stacks and deal 150-200 damage to all enemies in a 3x3 tile square",
+    "source": "wiki"
+  },
+  {
+    "id": 154,
+    "result_ball": "Phantom",
+    "recipe": "Dark + Ghost",
+    "ingredients": [
+      "Dark",
+      "Ghost"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Curse enemies on hit. Cursed enemies are dealt 100-200 damage after being hit 5 times",
+    "category": "basic",
+    "result_image": "img/balls/phantom.png",
+    "ingredient_1": "Dark",
+    "ingredient_2": "Ghost",
+    "wiki_combination": "Dark+Ghost",
+    "wiki_description": "Curse enemies on hit. Cursed enemies are dealt 100-200 damage after being hit 5 times",
+    "source": "wiki"
+  },
+  {
+    "id": 155,
+    "result_ball": "Radiation Beam",
+    "recipe": "Laser (Horizontal) or Laser (Vertical) + Poison or Cell",
+    "ingredients": [
+      "Laser (H or izontal) or Laser (Vertical)",
+      "Poison or Cell"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Emit a radiation beam on hit that deals 24-48 damage and applies 1 stack of radiation (max 5 stacks). Radiation lasts for 15 seconds and cause enemies to receive 10% more damage from all sources per stack",
+    "category": "advanced",
+    "result_image": "img/balls/radiation_beam.png",
+    "ingredient_1": "Laser (Horizontal)",
+    "ingredient_2": "Poison",
+    "wiki_combination": "(Laser (Horizontal)orLaser (Vertical)) + (PoisonorCell)",
+    "wiki_description": "Emit a radiation beam on hit that deals 24-48 damage and applies 1 stack of radiation (max 5 stacks). Radiation lasts for 15 seconds and cause enemies to receive 10% more damage from all sources per stack",
+    "source": "wiki",
+    "ingredient_1_alt": "Laser (Vertical)",
+    "ingredient_2_alt": "Cell"
+  },
+  {
+    "id": 156,
+    "result_ball": "Sacrifice",
+    "recipe": "Bleed + Dark",
+    "ingredients": [
+      "Bleed",
+      "Dark"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Inflicts 4 stacks of bleed (max 15 stacks) and applies curse to hit enemies. Cursed enemies are dealt 50-100 after being hit 5 times",
+    "category": "basic",
+    "result_image": "img/balls/sacrifice.png",
+    "ingredient_1": "Bleed",
+    "ingredient_2": "Dark",
+    "wiki_combination": "Bleed+Dark",
+    "wiki_description": "Inflicts 4 stacks of bleed (max 15 stacks) and applies curse to hit enemies. Cursed enemies are dealt 50-100 after being hit 5 times",
+    "source": "wiki"
+  },
+  {
+    "id": 157,
+    "result_ball": "Shotgun",
+    "recipe": "Iron + Egg Sac",
+    "ingredients": [
+      "Iron",
+      "Egg Sac"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Shoots 3-7 iron baby balls after hitting a wall. Iron baby balls move at 200% speed but are destroyed upon hitting anything",
+    "category": "basic",
+    "result_image": "img/balls/shotgun.png",
+    "ingredient_1": "Iron",
+    "ingredient_2": "Egg Sac",
+    "wiki_combination": "Iron+Egg Sac",
+    "wiki_description": "Shoots 3-7 iron baby balls after hitting a wall. Iron baby balls move at 200% speed but are destroyed upon hitting anything",
+    "source": "wiki"
+  },
+  {
+    "id": 158,
+    "result_ball": "Soul Sucker",
+    "recipe": "Vampire + Ghost",
+    "ingredients": [
+      "Vampire",
+      "Ghost"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Passes through enemies and saps them, with a 30% chance of stealing 1 health and reducing their attack damage by 20%. Lifesteal chance only applies once per enemy",
+    "category": "basic",
+    "result_image": "img/balls/soul_sucker.png",
+    "ingredient_1": "Vampire",
+    "ingredient_2": "Ghost",
+    "wiki_combination": "Vampire+Ghost",
+    "wiki_description": "Passes through enemies and saps them, with a 30% chance of stealing 1 health and reducing their attack damage by 20%. Lifesteal chance only applies once per enemy",
+    "source": "wiki"
+  },
+  {
+    "id": 159,
+    "result_ball": "Swamp",
+    "recipe": "Poison + Earthquake",
+    "ingredients": [
+      "Poison",
+      "Earthquake"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Leaves behind tar blobs over time. Enemies who walk into tar blobs are dealt 15-30, are slowed by 50% for 7 seconds and gain 1 stack of poison (max 8 stacks). Each stack of poison deals 1-3 damage per second. This ball and its tar blobs also deal 6-12 damage to nearby units",
+    "category": "basic",
+    "result_image": "img/balls/swamp.png",
+    "ingredient_1": "Poison",
+    "ingredient_2": "Earthquake",
+    "wiki_combination": "Poison+Earthquake",
+    "wiki_description": "Leaves behind tar blobs over time. Enemies who walk into tar blobs are dealt 15-30, are slowed by 50% for 7 seconds and gain 1 stack of poison (max 8 stacks). Each stack of poison deals 1-3 damage per second. This ball and its tar blobs also deal 6-12 damage to nearby units",
+    "source": "wiki"
+  },
+  {
+    "id": 160,
+    "result_ball": "Virus",
+    "recipe": "Poison + Ghost or Cell",
+    "ingredients": [
+      "Poison",
+      "Ghost or Cell"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Applies 1 stack of disease to units it hits (max 8 stacks). Disease lasts for 6 seconds. Each stack of disease deals 3-6 damage per second and diseased units have a 15% chance of passing a stack to undiseased nearby enemies each second",
+    "category": "advanced",
+    "result_image": "img/balls/virus.png",
+    "ingredient_1": "Poison",
+    "ingredient_2": "Ghost",
+    "wiki_combination": "Poison+ (GhostorCell)",
+    "wiki_description": "Applies 1 stack of disease to units it hits (max 8 stacks). Disease lasts for 6 seconds. Each stack of disease deals 3-6 damage per second and diseased units have a 15% chance of passing a stack to undiseased nearby enemies each second",
+    "source": "wiki",
+    "ingredient_2_alt": "Cell"
+  },
+  {
+    "id": 161,
+    "result_ball": "Voluptuous Egg Sac",
+    "recipe": "Egg Sac + Cell",
+    "ingredients": [
+      "Egg Sac",
+      "Cell"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Explodes into 2-3 egg sacs on hitting an enemy. Has a 3 second cooldown before it can be shot again",
+    "category": "basic",
+    "result_image": "img/balls/voluptuous_egg_sac.png",
+    "ingredient_1": "Egg Sac",
+    "ingredient_2": "Cell",
+    "wiki_combination": "Egg Sac+Cell",
+    "wiki_description": "Explodes into 2-3 egg sacs on hitting an enemy. Has a 3 second cooldown before it can be shot again",
+    "source": "wiki"
+  },
+  {
+    "id": 162,
+    "result_ball": "Wraith",
+    "recipe": "Freeze + Ghost",
+    "ingredients": [
+      "Freeze",
+      "Ghost"
+    ],
+    "tier": "B",
+    "difficulty": "Medium",
+    "tips": "Freezes any enemy it passes through for 0.8 seconds",
+    "category": "basic",
+    "result_image": "img/balls/wraith.png",
+    "ingredient_1": "Freeze",
+    "ingredient_2": "Ghost",
+    "wiki_combination": "Freeze+Ghost",
+    "wiki_description": "Freezes any enemy it passes through for 0.8 seconds",
+    "source": "wiki"
+  }
+]

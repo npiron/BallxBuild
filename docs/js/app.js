@@ -79,7 +79,7 @@ function renderCharacters() {
              data-tooltip="${c.name}|${c.ability || "Aucune capacité"}|Balle: ${c.starting_ball} · Tier ${c.tier}">
             ${imgTag(c.image, c.name, "🎮")}
             <span class="entity-name">${c.name.replace("The ", "")}</span>
-            <span class="tier-badge tier-${c.tier.toLowerCase()}">${c.tier}</span>
+            <span class="tier-badge tier-${c.tier.toLowerCase().replace('+', '-plus')}">${c.tier}</span>
         </div>`
         )
         .join("");
@@ -333,22 +333,46 @@ function computeSuggestions() {
     const seen = new Set();
     for (const ball of currentBalls) {
         const evos = state.evolutions.filter(
-            (e) => e.ingredient_1 === ball || e.ingredient_2 === ball
+            (e) => e.ingredient_1 === ball || e.ingredient_2 === ball || e.ingredient_3 === ball
+                || e.ingredient_1_alt === ball || e.ingredient_2_alt === ball
         );
         for (const evo of evos) {
             if (seen.has(evo.result_ball)) continue;
             seen.add(evo.result_ball);
-            const otherIng = evo.ingredient_1 === ball ? evo.ingredient_2 : evo.ingredient_1;
-            possibleEvolutions.push({
-                ...evo,
-                from_ball: ball,
-                needs_ball: otherIng,
-                have_both: currentBalls.includes(otherIng),
-            });
+
+            // Handle triple evolutions (ingredient_3)
+            if (evo.ingredient_3) {
+                const have1 = currentBalls.includes(evo.ingredient_1);
+                const have2 = currentBalls.includes(evo.ingredient_2);
+                const have3 = currentBalls.includes(evo.ingredient_3);
+                const needed = [];
+                if (!have1) needed.push(evo.ingredient_1);
+                if (!have2) needed.push(evo.ingredient_2);
+                if (!have3) needed.push(evo.ingredient_3);
+                possibleEvolutions.push({
+                    ...evo,
+                    from_ball: ball,
+                    needs_ball: needed.join(" + "),
+                    have_both: have1 && have2 && have3,
+                });
+            } else {
+                // Check if ball matches via alt ingredients
+                const matchesIng1 = (evo.ingredient_1 === ball || evo.ingredient_1_alt === ball);
+                const matchesIng2 = (evo.ingredient_2 === ball || evo.ingredient_2_alt === ball);
+                const otherIng = matchesIng1 ? evo.ingredient_2 : evo.ingredient_1;
+                const otherIngAlt = matchesIng1 ? evo.ingredient_2_alt : evo.ingredient_1_alt;
+                const haveOther = currentBalls.includes(otherIng) || (otherIngAlt && currentBalls.includes(otherIngAlt));
+                possibleEvolutions.push({
+                    ...evo,
+                    from_ball: ball,
+                    needs_ball: otherIngAlt ? `${otherIng} or ${otherIngAlt}` : otherIng,
+                    have_both: haveOther,
+                });
+            }
         }
     }
 
-    const tierOrder = { S: 0, A: 1, B: 2, C: 3 };
+    const tierOrder = { "S+": 0, S: 1, A: 2, B: 3, C: 4 };
     possibleEvolutions.sort(
         (a, b) => (a.have_both ? 0 : 1) - (b.have_both ? 0 : 1) || (tierOrder[a.tier] || 9) - (tierOrder[b.tier] || 9)
     );
@@ -369,7 +393,7 @@ function computeSuggestions() {
         const reasons = [];
 
         // Tier score
-        const tierScore = { S: 30, A: 20, B: 10 };
+        const tierScore = { "S+": 40, S: 30, "A+": 25, A: 20, B: 10 };
         score += tierScore[b.tier] || 0;
 
         // Character match
@@ -487,6 +511,13 @@ function renderResults(data) {
         evoCards.innerHTML = data.possible_evolutions
             .map((evo) => {
                 const readyClass = evo.have_both ? "ready" : "";
+                // Handle triple evolutions
+                const ing3HTML = evo.ingredient_3 ? `
+                    <span class="evo-plus">+</span>
+                    <div class="evo-ingredient ${state.selectedBalls.includes(evo.ingredient_3) ? "owned" : "missing"}">
+                        ${imgTag(null, evo.ingredient_3, "⚪")}
+                        <span class="evo-label">${evo.ingredient_3}</span>
+                    </div>` : '';
                 return `
                 <div class="evo-card ${readyClass}">
                     <div class="evo-ingredient ${state.selectedBalls.includes(evo.ingredient_1) ? "owned" : "missing"}">
@@ -498,10 +529,11 @@ function renderResults(data) {
                         ${imgTag(evo.ingredient_2_image, evo.ingredient_2, "⚪")}
                         <span class="evo-label">${evo.ingredient_2}</span>
                     </div>
+                    ${ing3HTML}
                     <span class="evo-arrow">→</span>
                     ${imgTag(evo.result_image, evo.result_ball, "✨")}
                     <span class="evo-label" style="font-weight:700;color:var(--text-primary)">${evo.result_ball}</span>
-                    <span class="evo-tier tier-${evo.tier.toLowerCase()}">${evo.tier}</span>
+                    <span class="evo-tier tier-${evo.tier.toLowerCase().replace('+', '-plus')}">${evo.tier}</span>
                 </div>`;
             })
             .join("");
@@ -527,7 +559,7 @@ function renderResults(data) {
 }
 
 function renderBuildCard(build, idx) {
-    const tierClass = `tier-${build.tier.toLowerCase()}-card`;
+    const tierClass = `tier-${build.tier.toLowerCase().replace('+', '-plus')}-card`;
     const rankEmojis = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"];
 
     // Roadmap
@@ -594,7 +626,7 @@ function renderBuildCard(build, idx) {
             <span class="build-rank">${rankEmojis[idx] || ""}</span>
             <span class="build-name">${build.name}</span>
             <span class="build-archetype">${build.archetype}</span>
-            <span class="build-tier-badge tier-${build.tier.toLowerCase()}">Tier ${build.tier}</span>
+            <span class="build-tier-badge tier-${build.tier.toLowerCase().replace('+', '-plus')}">Tier ${build.tier}</span>
             <span class="build-score">Score: <strong>${build.score}</strong></span>
         </div>
 

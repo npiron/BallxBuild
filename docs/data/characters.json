@@ -1,1 +1,558 @@
-[{"id": 2, "name": "The Itchy Finger", "starting_ball": "Burn", "ability": "Double shot speed, continuous autofire, full speed movement while firing, scattered aim", "tier": "S", "blueprint_location": "BONExYARD", "image": "img/characters/the_itchy_finger.png", "image_mini": "img/characters/the_itchy_finger_mini.png", "starting_ball_image": "img/balls/burn.png"}, {"id": 3, "name": "The Repentant", "starting_ball": "Freeze", "ability": "Ball deals 5% more damage per bounce; pierces on return after hitting back wall", "tier": "S", "blueprint_location": "BONExYARD", "image": "img/characters/the_repentant.png", "image_mini": "img/characters/the_repentant_mini.png", "starting_ball_image": "img/balls/freeze.png"}, {"id": 9, "name": "The Shieldbearer", "starting_ball": "Iron", "ability": "Large shield; balls bounced off shield gain +100% damage", "tier": "S", "blueprint_location": "FUNGALxFOREST", "image": "img/characters/the_shieldbearer.png", "image_mini": "img/characters/the_shieldbearer_mini.png", "starting_ball_image": "img/balls/iron.png"}, {"id": 4, "name": "The Cohabitants", "starting_ball": "Brood Mother", "ability": "Fires two mirrored balls per shot, each deals half damage", "tier": "A", "blueprint_location": "BONExYARD", "image": "img/characters/the_cohabitants.png", "image_mini": "img/characters/the_cohabitants_mini.png", "starting_ball_image": "img/balls/brood_mother.png"}, {"id": 5, "name": "The Embedded", "starting_ball": "Poison", "ability": "All balls pierce enemies until hitting side walls", "tier": "A", "blueprint_location": "SNOWYxSHORES", "image": "img/characters/the_embedded.png", "image_mini": "img/characters/the_embedded_mini.png", "starting_ball_image": "img/balls/poison.png"}, {"id": 7, "name": "The Shade", "starting_ball": "Dark", "ability": "Balls launch from back of field; +10% base critical chance", "tier": "A", "blueprint_location": "LIMINALxDESERT", "image": "img/characters/the_shade.png", "image_mini": "img/characters/the_shade_mini.png", "starting_ball_image": "img/balls/dark.png"}, {"id": 10, "name": "The Spendthrift", "starting_ball": "Vampire", "ability": "Fires all balls at once in a wide arc (AOE)", "tier": "A", "blueprint_location": "FUNGALxFOREST", "image": "img/characters/the_spendthrift.png", "image_mini": "img/characters/the_spendthrift_mini.png", "starting_ball_image": "img/balls/vampire.png"}, {"id": 6, "name": "The Cogitator", "starting_ball": "Laser (Vertical)", "ability": "Auto-pilot: character chooses all upgrades, balls, and evolutions automatically", "tier": "B", "blueprint_location": "SNOWYxSHORES", "image": "img/characters/the_cogitator.png", "image_mini": "img/characters/the_cogitator_mini.png", "starting_ball_image": null}, {"id": 8, "name": "The Empty Nester", "starting_ball": "Ghost", "ability": "Shoots multiple special balls per shot; no baby ball mechanic", "tier": "B", "blueprint_location": "SNOWYxSHORES", "image": "img/characters/the_empty_nester.png", "image_mini": "img/characters/the_empty_nester_mini.png", "starting_ball_image": "img/balls/ghost.png"}, {"id": 11, "name": "The Flagellant", "starting_ball": "Egg Sac", "ability": "Balls interact with bottom of screen like a normal bounce", "tier": "B", "blueprint_location": "GORYxGRASSLANDS", "image": "img/characters/the_flagellant.png", "image_mini": "img/characters/the_flagellant_mini.png", "starting_ball_image": "img/balls/egg_sac.png"}, {"id": 12, "name": "The Juggler", "starting_ball": "Lightning", "ability": "Balls lobbed in an arc, only bounce after hitting ground", "tier": "B", "blueprint_location": "GORYxGRASSLANDS", "image": "img/characters/the_juggler.png", "image_mini": "img/characters/the_juggler_mini.png", "starting_ball_image": "img/balls/lightning.png"}, {"id": 15, "name": "The Physicist", "starting_ball": "Light", "ability": "Balls affected by gravity, curving toward back of screen", "tier": "B", "blueprint_location": "HEAVENLYxGATES", "image": "img/characters/the_physicist.png", "image_mini": "img/characters/the_physicist_mini.png", "starting_ball_image": "img/balls/light.png"}, {"id": 14, "name": "The Radical", "starting_ball": "Wind", "ability": "Fully automatic play and upgrades", "tier": "B", "blueprint_location": "SMOLDERINGxDEPTHS", "image": "img/characters/the_radical.png", "image_mini": "img/characters/the_radical_mini.png", "starting_ball_image": "img/balls/wind.png"}, {"id": 13, "name": "The Tactician", "starting_ball": "Iron", "ability": "Converts combat to turn-based sequences", "tier": "B", "blueprint_location": "SMOLDERINGxDEPTHS", "image": "img/characters/the_tactician.png", "image_mini": "img/characters/the_tactician_mini.png", "starting_ball_image": "img/balls/iron.png"}, {"id": 1, "name": "The Warrior", "starting_ball": "Bleed", "ability": null, "tier": "B", "blueprint_location": null, "image": "img/characters/the_warrior.png", "image_mini": "img/characters/the_warrior_mini.png", "starting_ball_image": "img/balls/bleed.png"}, {"id": 16, "name": "The False Messiah", "starting_ball": "Unknown", "ability": "Twitch integration exclusive abilities", "tier": "C", "blueprint_location": null, "image": "img/characters/the_false_messiah.png", "image_mini": "img/characters/the_false_messiah_mini.png", "starting_ball_image": null}]
+[
+  {
+    "id": 2,
+    "name": "The Itchy Finger",
+    "starting_ball": "Burn",
+    "ability": "High-risk, high-reward speedster that dominates with skilled play",
+    "tier": "S",
+    "difficulty": "Hard",
+    "unlock": "Build theSheriff's Office, blueprint dropped inThe BONExYARD",
+    "rating": 9,
+    "strengths": [
+      "Highest potential DPS",
+      "2x fire rate",
+      "Rapid-fire shooting",
+      "Speed-based builds"
+    ],
+    "weaknesses": [
+      "Glass cannon",
+      "Requires precise movement",
+      "High skill ceiling"
+    ],
+    "best_balls": [
+      "Speed Ball",
+      "Multi-Bounce",
+      "Chain Ball",
+      "Any high-frequency damage"
+    ],
+    "playstyle": "High-risk, high-reward speedster that dominates with skilled play",
+    "image": "img/characters/the_itchy_finger.png",
+    "image_mini": "img/characters/the_itchy_finger_mini.png",
+    "starting_ball_image": "img/balls/burn.png",
+    "ballxpit_net_name": "The Itchy Finger",
+    "wiki_ability": "Has scattered aim, but shoots twice as fast and constantly launches balls if any are available. Can move at full speed while shooting."
+  },
+  {
+    "id": 103,
+    "name": "The Physicist",
+    "starting_ball": "Light",
+    "ability": "Consistent damage dealer with excellent control and fusion flexibility",
+    "tier": "S",
+    "difficulty": "Easy",
+    "unlock": "Build theLaboratory, blueprint dropped inThe FUNGALxFOREST",
+    "rating": 9.2,
+    "strengths": [
+      "Steady fire damage",
+      "Excellent fusion synergy",
+      "Forgiving playstyle",
+      "Consistent scaling"
+    ],
+    "weaknesses": [
+      "Requires specific builds",
+      "Mid-tier burst damage"
+    ],
+    "best_balls": [
+      "Sun evolution",
+      "Light-based combos",
+      "Holy Laser",
+      "Elemental fusions"
+    ],
+    "playstyle": "Consistent damage dealer with excellent control and fusion flexibility",
+    "image": "img/characters/the_physicist.png",
+    "image_mini": "img/characters/the_physicist_mini.png",
+    "starting_ball_image": "img/balls/light.png",
+    "ballxpit_net_name": "Lantern Knight",
+    "wiki_ability": "Balls are affected by gravity pulling towards the back of the screen."
+  },
+  {
+    "id": 102,
+    "name": "The Shieldbearer",
+    "starting_ball": "Iron",
+    "ability": "Tanky powerhouse that can take risks and survive deep runs",
+    "tier": "S",
+    "difficulty": "Easy",
+    "unlock": "Build theIron Fortress, blueprint dropped inThe FUNGALxFOREST",
+    "rating": 9.3,
+    "strengths": [
+      "Exceptional defense",
+      "Burn starting ball",
+      "Reliable damage",
+      "Survives extended encounters"
+    ],
+    "weaknesses": [
+      "Lower mobility",
+      "Slower early game"
+    ],
+    "best_balls": [
+      "Burn evolutions",
+      "Tank builds",
+      "Bomb",
+      "Magma"
+    ],
+    "playstyle": "Tanky powerhouse that can take risks and survive deep runs",
+    "image": "img/characters/the_shieldbearer.png",
+    "image_mini": "img/characters/the_shieldbearer_mini.png",
+    "starting_ball_image": "img/balls/iron.png",
+    "ballxpit_net_name": "Iron Fool",
+    "wiki_ability": "Holds a large shield that bounces back balls that hit it."
+  },
+  {
+    "id": 101,
+    "name": "The Warrior",
+    "starting_ball": "Bleed",
+    "ability": "Beginner-friendly generalist that excels at reaching powerful fusions quickly",
+    "tier": "S",
+    "difficulty": "Easy",
+    "unlock": "N/A (available at the start of the game)",
+    "rating": 9.5,
+    "strengths": [
+      "Rapid XP accumulation",
+      "Early fusion access",
+      "Smooth progression",
+      "Versatile playstyle"
+    ],
+    "weaknesses": [
+      "No specific specialty",
+      "Moderate damage output"
+    ],
+    "best_balls": [
+      "Any fusion-focused build",
+      "Elemental combinations",
+      "Area damage"
+    ],
+    "playstyle": "Beginner-friendly generalist that excels at reaching powerful fusions quickly",
+    "image": "img/characters/the_warrior.png",
+    "image_mini": "img/characters/the_warrior_mini.png",
+    "starting_ball_image": "img/balls/bleed.png",
+    "ballxpit_net_name": "The Pitling",
+    "wiki_ability": "The default character, no special gameplay quirks."
+  },
+  {
+    "id": 116,
+    "name": "The Cohabitants",
+    "starting_ball": "Brood Mother",
+    "ability": "Support-damage hybrid with musical attacks",
+    "tier": "A",
+    "difficulty": "Medium",
+    "unlock": "Build theCozy Home, blueprint dropped inThe BONExYARD",
+    "rating": 8.1,
+    "strengths": [
+      "AOE buffs",
+      "Party support",
+      "Musical attacks",
+      "Unique mechanics"
+    ],
+    "weaknesses": [
+      "Lower single-target damage",
+      "Support-oriented"
+    ],
+    "best_balls": [
+      "AOE-focused",
+      "Support builds",
+      "Crowd control"
+    ],
+    "playstyle": "Support-damage hybrid with musical attacks",
+    "image": "img/characters/the_cohabitants.png",
+    "image_mini": "img/characters/the_cohabitants_mini.png",
+    "starting_ball_image": "img/balls/brood_mother.png",
+    "ballxpit_net_name": "The Bard",
+    "wiki_ability": "For each ball launched, a copy is launched in the mirrored direction. Balls deal half damage."
+  },
+  {
+    "id": 107,
+    "name": "The Empty Nester",
+    "starting_ball": "Ghost",
+    "ability": "Specialized hunter that excels in undead-heavy biomes",
+    "tier": "A",
+    "difficulty": "Medium",
+    "unlock": "Build theSingle Family Home, blueprint dropped inThe SNOWYxSHORES",
+    "rating": 8,
+    "strengths": [
+      "Anti-undead bonus",
+      "Lifesteal synergy",
+      "Strong mid-game",
+      "Vampire counters"
+    ],
+    "weaknesses": [
+      "Niche specialty",
+      "Weaker against non-undead"
+    ],
+    "best_balls": [
+      "Vampire Lord",
+      "Bleed",
+      "Dark",
+      "Lifesteal builds"
+    ],
+    "playstyle": "Specialized hunter that excels in undead-heavy biomes",
+    "image": "img/characters/the_empty_nester.png",
+    "image_mini": "img/characters/the_empty_nester_mini.png",
+    "starting_ball_image": "img/balls/ghost.png",
+    "ballxpit_net_name": "Vampire Hunter",
+    "wiki_ability": "No baby balls. Each shot shoots multiple instances of one equipped special ball."
+  },
+  {
+    "id": 108,
+    "name": "The Flagellant",
+    "starting_ball": "Egg Sac",
+    "ability": "Control-oriented caster that manipulates enemies",
+    "tier": "A",
+    "difficulty": "Hard",
+    "unlock": "Build theMonastery, blueprint dropped inThe GORYxGRASSLANDS",
+    "rating": 7.8,
+    "strengths": [
+      "Charm mechanics",
+      "Enemy control",
+      "Succubus/Incubus paths",
+      "Crowd control"
+    ],
+    "weaknesses": [
+      "Complex mechanics",
+      "Lower direct damage",
+      "Requires setup"
+    ],
+    "best_balls": [
+      "Charm evolutions",
+      "Succubus",
+      "Incubus",
+      "Satan path"
+    ],
+    "playstyle": "Control-oriented caster that manipulates enemies",
+    "image": "img/characters/the_flagellant.png",
+    "image_mini": "img/characters/the_flagellant_mini.png",
+    "starting_ball_image": "img/balls/egg_sac.png",
+    "ballxpit_net_name": "The Witch",
+    "wiki_ability": "Balls bounce normally off the bottom of the screen."
+  },
+  {
+    "id": 14,
+    "name": "The Radical",
+    "starting_ball": "Wind",
+    "ability": "Mobile striker with unique movement-based gameplay",
+    "tier": "A",
+    "difficulty": "Medium",
+    "unlock": "Build theCampground, blueprint dropped inThe HEAVENLYxGATES",
+    "rating": 8.3,
+    "strengths": [
+      "High mobility",
+      "Unique skateboard mechanic",
+      "AFK farming potential",
+      "Fun gameplay"
+    ],
+    "weaknesses": [
+      "Lower base damage",
+      "Requires movement mastery"
+    ],
+    "best_balls": [
+      "Speed-based",
+      "Bounce mechanics",
+      "Area control"
+    ],
+    "playstyle": "Mobile striker with unique movement-based gameplay",
+    "image": "img/characters/the_radical.png",
+    "image_mini": "img/characters/the_radical_mini.png",
+    "starting_ball_image": "img/balls/wind.png",
+    "ballxpit_net_name": "The Radical",
+    "wiki_ability": "Plays the game and chooses upgrades automatically."
+  },
+  {
+    "id": 105,
+    "name": "The Spendthrift",
+    "starting_ball": "Vampire",
+    "ability": "Economy-focused character for resource grinding and base development",
+    "tier": "A",
+    "difficulty": "Medium",
+    "unlock": "Build theMansion, blueprint dropped inThe FUNGALxFOREST",
+    "rating": 8.5,
+    "strengths": [
+      "Increased resource gains",
+      "Gold farming",
+      "Strong economy",
+      "Faster progression"
+    ],
+    "weaknesses": [
+      "Lower combat stats",
+      "Requires specific strategy"
+    ],
+    "best_balls": [
+      "Resource multipliers",
+      "AOE damage",
+      "Survival builds"
+    ],
+    "playstyle": "Economy-focused character for resource grinding and base development",
+    "image": "img/characters/the_spendthrift.png",
+    "image_mini": "img/characters/the_spendthrift_mini.png",
+    "starting_ball_image": "img/balls/vampire.png",
+    "ballxpit_net_name": "The Greedy",
+    "wiki_ability": "Shoots all balls at the same time in a wide arc."
+  },
+  {
+    "id": 118,
+    "name": "The Carouser",
+    "starting_ball": "Charm",
+    "ability": "Balls can briefly orbit around player when on a return trajectory.",
+    "tier": "B",
+    "difficulty": "Medium",
+    "unlock": "Build theParty House, blueprint dropped inThe VASTxVOID",
+    "rating": 7.0,
+    "strengths": [],
+    "weaknesses": [],
+    "best_balls": [],
+    "playstyle": "Balls can briefly orbit around player when on a return trajectory.",
+    "image": "img/characters/the_carouser.png",
+    "image_mini": "img/characters/the_carouser_mini.png",
+    "starting_ball_image": "img/balls/charm.png",
+    "source": "wiki"
+  },
+  {
+    "id": 110,
+    "name": "The Cogitator",
+    "starting_ball": "Laser (Vertical)",
+    "ability": "High-variance character for players who enjoy chaos and adaptation",
+    "tier": "B",
+    "difficulty": "Very Hard",
+    "unlock": "Build theVilla, blueprint dropped inThe SNOWYxSHORES",
+    "rating": 7,
+    "strengths": [
+      "RNG can be amazing",
+      "High variance",
+      "Unpredictable power spikes"
+    ],
+    "weaknesses": [
+      "Extremely inconsistent",
+      "RNG-dependent",
+      "Unreliable"
+    ],
+    "best_balls": [
+      "Whatever RNG gives you",
+      "Adaptation required"
+    ],
+    "playstyle": "High-variance character for players who enjoy chaos and adaptation",
+    "image": "img/characters/the_cogitator.png",
+    "image_mini": "img/characters/the_cogitator_mini.png",
+    "starting_ball_image": "img/balls/laser_vertical.png",
+    "ballxpit_net_name": "The Gambler",
+    "wiki_ability": "Automatically chooses upgrades."
+  },
+  {
+    "id": 117,
+    "name": "The Falconer",
+    "starting_ball": "Lightning",
+    "ability": "Balls are shot from two falcons flying on the sides of the screen.",
+    "tier": "B",
+    "difficulty": "Medium",
+    "unlock": "Build theFalconry Hut, blueprint dropped inThe HEAVENLYxGATES",
+    "rating": 7.0,
+    "strengths": [],
+    "weaknesses": [],
+    "best_balls": [],
+    "playstyle": "Balls are shot from two falcons flying on the sides of the screen.",
+    "image": "img/characters/the_falconer.png",
+    "image_mini": "img/characters/the_falconer_mini.png",
+    "starting_ball_image": "img/balls/lightning.png",
+    "source": "wiki"
+  },
+  {
+    "id": 119,
+    "name": "The False Messiah",
+    "starting_ball": "Bleed",
+    "ability": "If streaming on Twitch, audience can vote on certain choices and random events.",
+    "tier": "B",
+    "difficulty": "Medium",
+    "unlock": "Activate the Twitch Extension and link a Twitch account (PC exclusive)",
+    "rating": 7.0,
+    "strengths": [],
+    "weaknesses": [],
+    "best_balls": [],
+    "playstyle": "If streaming on Twitch, audience can vote on certain choices and random events.",
+    "image": "img/characters/the_false_messiah.png",
+    "image_mini": "img/characters/the_false_messiah_mini.png",
+    "starting_ball_image": "img/balls/bleed.png",
+    "source": "wiki"
+  },
+  {
+    "id": 109,
+    "name": "The Juggler",
+    "starting_ball": "Lightning",
+    "ability": "Defensive specialist that prioritizes survival over damage",
+    "tier": "B",
+    "difficulty": "Easy",
+    "unlock": "Build theTheater, blueprint dropped inThe GORYxGRASSLANDS",
+    "rating": 7.5,
+    "strengths": [
+      "Defensive capabilities",
+      "Easy to learn",
+      "Reliable",
+      "Good for beginners"
+    ],
+    "weaknesses": [
+      "Lower damage ceiling",
+      "Slower clears",
+      "Limited scaling"
+    ],
+    "best_balls": [
+      "Defense-oriented",
+      "Tank builds",
+      "Survival focus"
+    ],
+    "playstyle": "Defensive specialist that prioritizes survival over damage",
+    "image": "img/characters/the_juggler.png",
+    "image_mini": "img/characters/the_juggler_mini.png",
+    "starting_ball_image": "img/balls/lightning.png",
+    "ballxpit_net_name": "Knight Captain",
+    "wiki_ability": "Lobs balls into the air at a target position on the field. Balls don't start bouncing until they reach the ground."
+  },
+  {
+    "id": 111,
+    "name": "The Makeshift Sisyphus",
+    "starting_ball": "Earthquake",
+    "ability": "Resource specialist with earth-based damage",
+    "tier": "B",
+    "difficulty": "Medium",
+    "unlock": "Build theRocky Hill, blueprint dropped inThe LIMINALxDESERT",
+    "rating": 7.2,
+    "strengths": [
+      "Resource gathering",
+      "Stone synergies",
+      "Strong AOE potential"
+    ],
+    "weaknesses": [
+      "Slow start",
+      "Limited mobility",
+      "Niche role"
+    ],
+    "best_balls": [
+      "Earthquake",
+      "Rock-based",
+      "AOE damage"
+    ],
+    "playstyle": "Resource specialist with earth-based damage",
+    "image": "img/characters/the_makeshift_sisyphus.png",
+    "image_mini": "img/characters/the_makeshift_sisyphus_mini.png",
+    "starting_ball_image": "img/balls/earthquake.png",
+    "ballxpit_net_name": "The Miner",
+    "wiki_ability": "Balls no longer deal direct hit damage, but AOE and status effects damage is increased by 4x. No baby balls."
+  },
+  {
+    "id": 115,
+    "name": "The Shade",
+    "starting_ball": "Dark",
+    "ability": "Dark magic specialist with powerful late-game evolutions",
+    "tier": "B",
+    "difficulty": "Hard",
+    "unlock": "Build theMausoleum, blueprint dropped inThe LIMINALxDESERT",
+    "rating": 7.6,
+    "strengths": [
+      "Dark ball synergies",
+      "Summoning potential",
+      "Black Hole path available"
+    ],
+    "weaknesses": [
+      "Complex mechanics",
+      "Requires specific evolutions",
+      "Slow start"
+    ],
+    "best_balls": [
+      "Dark evolutions",
+      "Black Hole",
+      "Vampire Lord",
+      "Death-focused"
+    ],
+    "playstyle": "Dark magic specialist with powerful late-game evolutions",
+    "image": "img/characters/the_shade.png",
+    "image_mini": "img/characters/the_shade_mini.png",
+    "starting_ball_image": "img/balls/dark.png",
+    "ballxpit_net_name": "The Necromancer",
+    "wiki_ability": "Balls shoot from the back and have a base critical hit chance of 10%."
+  },
+  {
+    "id": 112,
+    "name": "The Embedded",
+    "starting_ball": "Poison",
+    "ability": "DOT specialist that slowly whittles down enemies",
+    "tier": "C",
+    "difficulty": "Hard",
+    "unlock": "Build theVeteran's Hut, blueprint dropped inThe SNOWYxSHORES",
+    "rating": 6.5,
+    "strengths": [
+      "Poison damage over time",
+      "Status effects",
+      "Debuff application"
+    ],
+    "weaknesses": [
+      "Slow kill times",
+      "Weak against bosses",
+      "Requires patience"
+    ],
+    "best_balls": [
+      "Poison evolutions",
+      "Nuclear Bomb path",
+      "DOT builds"
+    ],
+    "playstyle": "DOT specialist that slowly whittles down enemies",
+    "image": "img/characters/the_embedded.png",
+    "image_mini": "img/characters/the_embedded_mini.png",
+    "starting_ball_image": "img/balls/poison.png",
+    "ballxpit_net_name": "The Alchemist",
+    "wiki_ability": "Balls always pierce enemies until they hit a wall."
+  },
+  {
+    "id": 114,
+    "name": "The Repentant",
+    "starting_ball": "Freeze",
+    "ability": "Challenge character for skilled players seeking difficulty",
+    "tier": "C",
+    "difficulty": "Very Hard",
+    "unlock": "Build theHaunted House, blueprint dropped inThe BONExYARD",
+    "rating": 6,
+    "strengths": [
+      "Challenge mode",
+      "Skill expression",
+      "Unique gameplay"
+    ],
+    "weaknesses": [
+      "No starting ball",
+      "Extreme difficulty",
+      "Not recommended for progression"
+    ],
+    "best_balls": [
+      "First ball you find is critical",
+      "Defensive priority"
+    ],
+    "playstyle": "Challenge character for skilled players seeking difficulty",
+    "image": "img/characters/the_repentant.png",
+    "image_mini": "img/characters/the_repentant_mini.png",
+    "starting_ball_image": "img/balls/freeze.png",
+    "ballxpit_net_name": "The Monk",
+    "wiki_ability": "Balls deal 5% more damage each time they bounce. But when they hit the back wall, they return to the player, damaging each enemy they pass through."
+  },
+  {
+    "id": 113,
+    "name": "The Tactician",
+    "starting_ball": "Iron",
+    "ability": "Support character focused on long-term progression",
+    "tier": "C",
+    "difficulty": "Medium",
+    "unlock": "Build theCaptain's Quarters, blueprint dropped inThe SMOLDERINGxDEPTHS",
+    "rating": 6.8,
+    "strengths": [
+      "XP bonuses",
+      "Knowledge-based perks",
+      "Faster leveling"
+    ],
+    "weaknesses": [
+      "Lower combat power",
+      "Requires meta knowledge",
+      "Weak early game"
+    ],
+    "best_balls": [
+      "Any XP-focused build",
+      "Late-game scaling"
+    ],
+    "playstyle": "Support character focused on long-term progression",
+    "image": "img/characters/the_tactician.png",
+    "image_mini": "img/characters/the_tactician_mini.png",
+    "starting_ball_image": "img/balls/iron.png",
+    "ballxpit_net_name": "The Scholar",
+    "wiki_ability": "Battles become turn-based."
+  }
+]

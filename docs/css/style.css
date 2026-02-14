@@ -20,7 +20,9 @@
     --accent-secondary: #a78bfa;
     --accent-glow: rgba(139, 92, 246, 0.3);
     --tier-s: #ff6b35;
+    --tier-s-plus: #ff3d00;
     --tier-a: #fbbf24;
+    --tier-a-plus: #f59e0b;
     --tier-b: #60a5fa;
     --tier-c: #9ca3af;
     --rarity-common: #9ca3af;
@@ -428,7 +430,9 @@ body {
 .rarity-legendary { border-color: var(--rarity-legendary) !important; }
 
 /* ─── Tier badges ─── */
+.tier-s-plus { background: var(--tier-s-plus); color: #fff; text-shadow: 0 0 6px rgba(255,61,0,0.5); }
 .tier-s { background: var(--tier-s); color: #fff; }
+.tier-a-plus { background: var(--tier-a-plus); color: #1a1a2e; }
 .tier-a { background: var(--tier-a); color: #1a1a2e; }
 .tier-b { background: var(--tier-b); color: #1a1a2e; }
 .tier-c { background: var(--tier-c); color: #1a1a2e; }
@@ -652,8 +656,16 @@ body {
     height: 3px;
 }
 
+.build-card.tier-s-plus-card::before {
+    background: linear-gradient(90deg, var(--tier-s-plus), #ff6b35);
+}
+
 .build-card.tier-s-card::before {
     background: linear-gradient(90deg, var(--tier-s), #ff9a5c);
+}
+
+.build-card.tier-a-plus-card::before {
+    background: linear-gradient(90deg, var(--tier-a-plus), var(--tier-a));
 }
 
 .build-card.tier-a-card::before {
