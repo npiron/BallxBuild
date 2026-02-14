@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BALL x PIT — Build Suggester</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ═══ HEADER ═══ -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="ball-emoji">🎱</span>
+                BALL <span class="x">x</span> BUILD
+            </h1>
+            <p class="hero-subtitle">Suggérateur de Builds Intelligent</p>
+            <p class="hero-desc">Renseigne l'état de ta run — personnage, biome, balles, passifs — et obtiens les meilleurs builds optimisés.</p>
+        </div>
+    </header>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main class="container">
+
+        <!-- ─── RUN STATE PANEL ─── -->
+        <section class="panel run-state">
+            <h2 class="panel-title">
+                <span class="icon">⚙️</span> État de ta Run
+            </h2>
+
+            <!-- Character Selection -->
+            <div class="input-group">
+                <label class="input-label">
+                    <span class="icon">🎮</span> Personnage
+                </label>
+                <div id="character-grid" class="entity-grid character-grid"></div>
+            </div>
+
+            <!-- Biome Selection -->
+            <div class="input-group">
+                <label class="input-label">
+                    <span class="icon">🌍</span> Biome actuel
+                </label>
+                <div id="biome-grid" class="entity-grid biome-grid"></div>
+            </div>
+
+            <!-- Current Balls -->
+            <div class="input-group">
+                <label class="input-label">
+                    <span class="icon">🎱</span> Balles actuelles
+                    <span class="hint">(clique pour ajouter/retirer)</span>
+                </label>
+                <div class="balls-section">
+                    <div id="selected-balls" class="selected-items">
+                        <span class="placeholder">Aucune balle sélectionnée</span>
+                    </div>
+                    <div id="ball-grid" class="entity-grid ball-grid"></div>
+                </div>
+            </div>
+
+            <!-- Current Passives -->
+            <div class="input-group">
+                <label class="input-label">
+                    <span class="icon">🛡️</span> Passifs actuels
+                    <span class="hint">(clique pour ajouter/retirer)</span>
+                </label>
+                <div class="passives-section">
+                    <div id="selected-passives" class="selected-items">
+                        <span class="placeholder">Aucun passif sélectionné</span>
+                    </div>
+                    <div id="passive-grid" class="entity-grid passive-grid"></div>
+                </div>
+            </div>
+
+            <!-- Style Preference -->
+            <div class="input-group">
+                <label class="input-label">
+                    <span class="icon">🎯</span> Style préféré
+                    <span class="hint">(optionnel)</span>
+                </label>
+                <div id="style-buttons" class="style-grid">
+                    <button class="style-btn" data-style="aoe">
+                        <span class="style-icon">💥</span>
+                        <span>AOE / Status</span>
+                    </button>
+                    <button class="style-btn" data-style="sustain">
+                        <span class="style-icon">💚</span>
+                        <span>Sustain / Tank</span>
+                    </button>
+                    <button class="style-btn" data-style="control">
+                        <span class="style-icon">❄️</span>
+                        <span>Control</span>
+                    </button>
+                    <button class="style-btn" data-style="boss">
+                        <span class="style-icon">💀</span>
+                        <span>Boss Killer</span>
+                    </button>
+                    <button class="style-btn" data-style="minion">
+                        <span class="style-icon">🐛</span>
+                        <span>Minion Swarm</span>
+                    </button>
+                    <button class="style-btn" data-style="hybrid">
+                        <span class="style-icon">⚡</span>
+                        <span>Hybrid / Laser</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-bar">
+                <button id="btn-suggest" class="btn btn-primary">
+                    <span class="btn-icon">🔮</span>
+                    Analyser & Suggérer
+                </button>
+                <button id="btn-reset" class="btn btn-secondary">
+                    <span class="btn-icon">🔄</span>
+                    Reset
+                </button>
+            </div>
+        </section>
+
+        <!-- ─── RESULTS PANEL ─── -->
+        <section id="results" class="panel results-panel hidden">
+            <h2 class="panel-title">
+                <span class="icon">🏆</span> Builds Recommandés
+            </h2>
+            <div id="quick-evos" class="evolutions-section hidden">
+                <h3 class="section-subtitle">
+                    <span class="icon">🔬</span> Évolutions Disponibles
+                </h3>
+                <div id="evo-cards" class="evo-grid"></div>
+            </div>
+            <div id="build-suggestions" class="builds-section"></div>
+        </section>
+
+    </main>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+        <p>Données issues de <a href="https://ballxpit.wiki.gg" target="_blank">ballxpit.wiki.gg</a> — 
+        BALL x PIT © Kenny Sun / Devolver Digital</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
