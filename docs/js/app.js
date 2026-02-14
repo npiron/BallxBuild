@@ -297,29 +297,139 @@ function bindEvents() {
     setupTooltip();
 }
 
-// ═══ SUGGESTION ENGINE (client-side) ═══
+// ═══ SUGGESTION ENGINE v2 (client-side) ═══
+// Improved engine using status_effect synergies, character affinity,
+// evolution chains, alternative recipes, biome awareness, passive combos,
+// and smart "next pickup" recommendations.
+
+// ─── Lookup helpers (built once after loadData) ───
+let ballsByName = {};
+let passivesByName = {};
+let evosByResult = {};
+let evosByIngredient = {};
+
+function buildIndexes() {
+    ballsByName = {};
+    for (const b of state.balls) ballsByName[b.name] = b;
+    passivesByName = {};
+    for (const p of state.passives) passivesByName[p.name] = p;
+    evosByResult = {};
+    evosByIngredient = {};
+    for (const e of state.evolutions) {
+        evosByResult[e.result_ball] = e;
+        const keys = ["ingredient_1", "ingredient_2", "ingredient_3", "ingredient_1_alt", "ingredient_2_alt"];
+        for (const key of keys) {
+            const ing = e[key];
+            if (ing && typeof ing === "string") {
+                if (!Object.prototype.hasOwnProperty.call(evosByIngredient, ing)) {
+                    evosByIngredient[ing] = [];
+                }
+                evosByIngredient[ing].push(e);
+            }
+        }
+    }
+}
+
+// ─── Status effect extraction ───
+function getStatusEffects(ballName) {
+    const ball = ballsByName[ballName];
+    if (!ball || !ball.status_effect) return [];
+    return ball.status_effect.split(",").map((s) => s.trim()).filter(Boolean);
+}
+
+// ─── Evolution chain: trace full ingredient tree recursively ───
+function getEvolutionChain(targetBall, currentBalls, depth = 0) {
+    if (depth > 5) return null; // prevent infinite loops
+    if (currentBalls.includes(targetBall)) {
+        return { ball: targetBall, status: "owned", image: getImagePath("balls", targetBall) };
+    }
+    const recipe = evosByResult[targetBall];
+    if (!recipe) {
+        return { ball: targetBall, status: "pickup", image: getImagePath("balls", targetBall) };
+    }
+
+    const ingredients = [recipe.ingredient_1, recipe.ingredient_2];
+    if (recipe.ingredient_3) ingredients.push(recipe.ingredient_3);
+
+    const altIngredients = {};
+    if (recipe.ingredient_1_alt) altIngredients[recipe.ingredient_1] = recipe.ingredient_1_alt;
+    if (recipe.ingredient_2_alt) altIngredients[recipe.ingredient_2] = recipe.ingredient_2_alt;
+
+    const children = ingredients.map((ing) => {
+        // Check if alt ingredient is owned instead
+        const alt = altIngredients[ing];
+        if (currentBalls.includes(ing)) {
+            return { ball: ing, status: "owned", image: getImagePath("balls", ing) };
+        }
+        if (alt && currentBalls.includes(alt)) {
+            return { ball: alt, status: "owned", image: getImagePath("balls", alt), replaces: ing };
+        }
+        // Check if this ingredient is itself an evolution we can trace
+        const subChain = getEvolutionChain(ing, currentBalls, depth + 1);
+        if (subChain) return subChain;
+        return { ball: ing, status: "pickup", image: getImagePath("balls", ing), alt: alt || null };
+    });
+
+    const allOwned = children.every((c) => c.status === "owned");
+    const someOwned = children.some((c) => c.status === "owned");
+    const status = allOwned ? "ready" : someOwned ? "partial" : "missing";
+
+    return {
+        ball: targetBall,
+        status,
+        image: getImagePath("balls", targetBall),
+        children,
+        tier: recipe.tier,
+        tips: recipe.tips || recipe.wiki_description || null,
+    };
+}
+
+// ─── Biome synergy map ───
+const BIOME_SYNERGIES = {
+    "BONExYARD":          { strong: ["Burn", "Light", "Bleed"], weak: ["Dark"], desc: "Les ennemis squelettes sont faibles au feu et à la lumière" },
+    "SNOWYxSHORES":       { strong: ["Burn", "Earthquake", "Wind"], weak: ["Freeze"], desc: "Les ennemis de glace résistent au gel mais fondent au feu" },
+    "LIMINALxDESERT":     { strong: ["Freeze", "Poison", "Wind"], weak: ["Burn"], desc: "Le désert résiste au feu, le gel et le vent sont efficaces" },
+    "FUNGALxFOREST":      { strong: ["Burn", "Freeze", "Lightning"], weak: ["Poison"], desc: "Les champignons résistent au poison mais brûlent bien" },
+    "GORYxGRASSLANDS":    { strong: ["Burn", "Poison", "Dark"], weak: [], desc: "Terrain ouvert — les AoE et DoT excellent" },
+    "SMOLDERINGxDEPTHS":  { strong: ["Freeze", "Iron", "Ghost"], weak: ["Burn"], desc: "Les créatures de feu résistent au burn, le gel les stoppe" },
+    "HEAVENLYxGATES":     { strong: ["Dark", "Poison", "Bleed"], weak: ["Light"], desc: "Les ennemis divins résistent à la lumière, le dark excelle" },
+    "VASTxVOID":          { strong: ["Light", "Lightning", "Iron"], weak: [], desc: "Zone finale — les dégâts bruts et la lumière percent le vide" },
+};
+
+// ─── Style mapping extended with DPS/Burst/Survival/Speedrun ───
+const STYLE_MAP = {
+    aoe: ["AOE Status", "DPS", "Burst"], status: ["AOE Status"],
+    sustain: ["Sustain", "Survival"], tank: ["Sustain", "Survival"],
+    control: ["Control"], freeze: ["Control"],
+    boss: ["Boss Killer", "DPS", "Burst"], dps: ["DPS", "Boss Killer", "Burst"],
+    minion: ["Minion Swarm"], swarm: ["Minion Swarm"],
+    hybrid: ["Hybrid"], laser: ["Hybrid"],
+    burst: ["Burst", "DPS"], speedrun: ["Speedrun", "DPS", "Burst"],
+    survival: ["Survival", "Sustain"],
+};
 
 function suggest() {
     const btn = $("#btn-suggest");
     btn.classList.add("loading");
     btn.innerHTML = '<span class="spinner"></span> Analyse en cours...';
 
-    // Small delay for UX feedback
     setTimeout(() => {
+        buildIndexes();
         const result = computeSuggestions();
         renderResults(result);
         btn.classList.remove("loading");
         btn.innerHTML = '<span class="btn-icon">🔮</span> Analyser & Suggérer';
-    }, 150);
+    }, 100);
 }
 
 function computeSuggestions() {
     let currentBalls = [...state.selectedBalls];
     const currentPassives = [...state.selectedPassives];
     const character = state.selectedCharacter;
+    const biome = state.selectedBiome;
     const preferStyle = state.selectedStyle;
 
-    // Step 1: Character info
+    // ─── Step 1: Character info + enrichment ───
     let charInfo = null;
     if (character) {
         charInfo = state.characters.find((c) => c.name === character);
@@ -328,20 +438,17 @@ function computeSuggestions() {
         }
     }
 
-    // Step 2: Possible evolutions from current balls
+    // ─── Step 2: Possible evolutions (with alt ingredients) ───
     let possibleEvolutions = [];
     const seen = new Set();
     for (const ball of currentBalls) {
-        const evos = state.evolutions.filter(
-            (e) => e.ingredient_1 === ball || e.ingredient_2 === ball || e.ingredient_3 === ball
-                || e.ingredient_1_alt === ball || e.ingredient_2_alt === ball
-        );
+        const evos = (evosByIngredient[ball] || []);
         for (const evo of evos) {
             if (seen.has(evo.result_ball)) continue;
             seen.add(evo.result_ball);
 
-            // Handle triple evolutions (ingredient_3)
             if (evo.ingredient_3) {
+                // Triple evolution (e.g., Nosferatu)
                 const have1 = currentBalls.includes(evo.ingredient_1);
                 const have2 = currentBalls.includes(evo.ingredient_2);
                 const have3 = currentBalls.includes(evo.ingredient_3);
@@ -354,19 +461,21 @@ function computeSuggestions() {
                     from_ball: ball,
                     needs_ball: needed.join(" + "),
                     have_both: have1 && have2 && have3,
+                    match_count: (have1 ? 1 : 0) + (have2 ? 1 : 0) + (have3 ? 1 : 0),
+                    total_ingredients: 3,
                 });
             } else {
-                // Check if ball matches via alt ingredients
                 const matchesIng1 = (evo.ingredient_1 === ball || evo.ingredient_1_alt === ball);
-                const matchesIng2 = (evo.ingredient_2 === ball || evo.ingredient_2_alt === ball);
                 const otherIng = matchesIng1 ? evo.ingredient_2 : evo.ingredient_1;
                 const otherIngAlt = matchesIng1 ? evo.ingredient_2_alt : evo.ingredient_1_alt;
                 const haveOther = currentBalls.includes(otherIng) || (otherIngAlt && currentBalls.includes(otherIngAlt));
                 possibleEvolutions.push({
                     ...evo,
                     from_ball: ball,
-                    needs_ball: otherIngAlt ? `${otherIng} or ${otherIngAlt}` : otherIng,
+                    needs_ball: otherIngAlt ? `${otherIng} ou ${otherIngAlt}` : otherIng,
                     have_both: haveOther,
+                    match_count: 1 + (haveOther ? 1 : 0),
+                    total_ingredients: 2,
                 });
             }
         }
@@ -374,102 +483,181 @@ function computeSuggestions() {
 
     const tierOrder = { "S+": 0, S: 1, A: 2, B: 3, C: 4 };
     possibleEvolutions.sort(
-        (a, b) => (a.have_both ? 0 : 1) - (b.have_both ? 0 : 1) || (tierOrder[a.tier] || 9) - (tierOrder[b.tier] || 9)
+        (a, b) =>
+            (a.have_both ? 0 : 1) - (b.have_both ? 0 : 1) ||
+            (tierOrder[a.tier] ?? 9) - (tierOrder[b.tier] ?? 9) ||
+            b.match_count - a.match_count
     );
 
-    // Step 3: Score and recommend builds
-    const styleMap = {
-        aoe: "AOE Status", status: "AOE Status",
-        sustain: "Sustain", tank: "Sustain",
-        control: "Control", freeze: "Control",
-        boss: "Boss Killer", dps: "Boss Killer",
-        minion: "Minion Swarm", swarm: "Minion Swarm",
-        hybrid: "Hybrid", laser: "Hybrid",
-    };
+    // ─── Step 3: Detect status effect profile ───
+    const statusProfile = {};
+    for (const ballName of currentBalls) {
+        for (const effect of getStatusEffects(ballName)) {
+            statusProfile[effect] = (statusProfile[effect] || 0) + 1;
+        }
+    }
+    const dominantEffects = Object.entries(statusProfile)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([eff]) => eff);
 
+    // ─── Step 4: Biome analysis ───
+    let biomeSynergy = null;
+    if (biome && BIOME_SYNERGIES[biome]) {
+        biomeSynergy = BIOME_SYNERGIES[biome];
+    }
+
+    // ─── Step 5: Score and recommend builds ───
     const scoredBuilds = state.builds.map((build) => {
         const b = { ...build };
         let score = 0;
         const reasons = [];
 
-        // Tier score
-        const tierScore = { "S+": 40, S: 30, "A+": 25, A: 20, B: 10 };
+        // === Tier score ===
+        const tierScore = { "S+": 45, S: 35, "A+": 28, A: 22, B: 12 };
         score += tierScore[b.tier] || 0;
 
-        // Character match
+        // === Character match ===
         if (character && (b.recommended_characters || "").includes(character)) {
-            score += 40;
+            score += 45;
             reasons.push(`Recommandé pour ${character}`);
         }
 
-        // Style match
-        if (preferStyle) {
-            const mapped = styleMap[preferStyle.toLowerCase()];
-            if (mapped && mapped === b.archetype) {
-                score += 35;
-                reasons.push(`Style ${mapped} demandé`);
+        // === Character playstyle affinity ===
+        if (charInfo && b.archetype) {
+            const charStrengths = (charInfo.strengths || []).join(" ").toLowerCase();
+            const charPlaystyle = (charInfo.playstyle || "").toLowerCase();
+            const archLower = b.archetype.toLowerCase();
+            if (charStrengths.includes("dps") && (archLower.includes("dps") || archLower.includes("boss"))) {
+                score += 15;
+                reasons.push(`Synergie playstyle DPS`);
+            }
+            if (charStrengths.includes("defense") && (archLower.includes("sustain") || archLower.includes("survival"))) {
+                score += 15;
+                reasons.push(`Synergie playstyle défensif`);
+            }
+            if (charPlaystyle.includes("speed") && archLower.includes("speed")) {
+                score += 10;
+                reasons.push(`Synergie vitesse`);
             }
         }
 
-        // Ball synergy
-        const buildBalls = b.core_balls.split(",").map((s) => s.trim());
-        for (const cb of currentBalls) {
-            if (buildBalls.includes(cb)) {
-                score += 15;
-                reasons.push(`Balle ${cb} dans le build`);
-            }
-            for (const evo of possibleEvolutions) {
-                if (evo.from_ball === cb && buildBalls.includes(evo.result_ball)) {
-                    score += 10;
-                    reasons.push(`${cb} → ${evo.result_ball}`);
+        // === Character best_balls match ===
+        if (charInfo && charInfo.best_balls) {
+            const buildBallsRaw = b.core_balls.split(",").map((s) => s.trim().toLowerCase());
+            for (const bb of charInfo.best_balls) {
+                const bbLower = bb.toLowerCase();
+                if (buildBallsRaw.some((name) => name.includes(bbLower) || bbLower.includes(name))) {
+                    score += 12;
+                    reasons.push(`${bb} recommandé pour ${character}`);
+                    break;
                 }
             }
         }
 
-        // Passive synergy
+        // === Style match (extended) ===
+        if (preferStyle) {
+            const matchedTypes = STYLE_MAP[preferStyle.toLowerCase()] || [];
+            if (matchedTypes.includes(b.archetype)) {
+                score += 40;
+                reasons.push(`Style ${b.archetype} demandé`);
+            } else if (matchedTypes.some((t) => (b.archetype || "").toLowerCase().includes(t.toLowerCase()))) {
+                score += 20;
+                reasons.push(`Style similaire à ${b.archetype}`);
+            }
+        }
+
+        // === Ball synergy ===
+        const buildBalls = b.core_balls.split(",").map((s) => s.trim());
+        let ballOverlap = 0;
+        for (const cb of currentBalls) {
+            if (buildBalls.includes(cb)) {
+                ballOverlap++;
+                score += 18;
+                reasons.push(`Balle ${cb} dans le build`);
+            }
+            // Can evolve into a build ball?
+            for (const evo of possibleEvolutions) {
+                if (evo.from_ball === cb && buildBalls.includes(evo.result_ball)) {
+                    score += evo.have_both ? 15 : 8;
+                    reasons.push(`${cb} → ${evo.result_ball}${evo.have_both ? " (prêt!)" : ""}`);
+                }
+            }
+        }
+
+        // === Status effect synergy with build ===
+        const buildEffects = new Set();
+        for (const bbName of buildBalls) {
+            for (const eff of getStatusEffects(bbName)) buildEffects.add(eff);
+        }
+        let effectOverlap = 0;
+        for (const eff of dominantEffects) {
+            if (buildEffects.has(eff)) {
+                effectOverlap++;
+                score += 12;
+                reasons.push(`Synergie effet ${eff}`);
+            }
+        }
+
+        // === Passive synergy ===
         const buildPassives = (b.core_passives || "").split(",").map((s) => s.trim());
         for (const cp of currentPassives) {
             if (buildPassives.includes(cp)) {
-                score += 10;
+                score += 12;
                 reasons.push(`Passif ${cp} dans le build`);
             }
         }
 
-        // Roadmap
-        const roadmap = buildBalls.map((targetBall) => {
-            if (currentBalls.includes(targetBall)) {
-                return {
-                    ball: targetBall,
-                    status: "owned",
-                    image: getImagePath("balls", targetBall),
-                };
+        // === Biome synergy ===
+        if (biomeSynergy) {
+            let biomeBonus = 0;
+            for (const bbName of buildBalls) {
+                const ball = ballsByName[bbName];
+                if (!ball) continue;
+                const ballEffects = getStatusEffects(bbName);
+                const ballBase = ball.name;
+                // Check if ball's type is strong in this biome
+                for (const strong of biomeSynergy.strong) {
+                    if (ballBase === strong || ballEffects.includes(strong)) {
+                        biomeBonus += 8;
+                        break;
+                    }
+                }
+                // Penalty for weak types
+                for (const weak of biomeSynergy.weak) {
+                    if (ballBase === weak || ballEffects.includes(weak)) {
+                        biomeBonus -= 5;
+                        break;
+                    }
+                }
             }
-            const recipe = state.evolutions.find((e) => e.result_ball === targetBall);
-            if (recipe) {
-                const have1 = currentBalls.includes(recipe.ingredient_1);
-                const have2 = currentBalls.includes(recipe.ingredient_2);
-                const status = have1 && have2 ? "ready" : have1 || have2 ? "partial" : "missing";
-                return {
-                    ball: targetBall,
-                    status,
-                    ingredient_1: recipe.ingredient_1,
-                    ingredient_2: recipe.ingredient_2,
-                    have_1: have1,
-                    have_2: have2,
-                    image: getImagePath("balls", targetBall),
-                    ing1_image: getImagePath("balls", recipe.ingredient_1),
-                    ing2_image: getImagePath("balls", recipe.ingredient_2),
-                };
+            if (biomeBonus > 0) {
+                score += biomeBonus;
+                reasons.push(`Efficace dans ${biome}`);
+            } else if (biomeBonus < 0) {
+                score += biomeBonus;
+                reasons.push(`⚠ Faible dans ${biome}`);
             }
-            return {
-                ball: targetBall,
-                status: "pickup",
-                image: getImagePath("balls", targetBall),
-            };
-        });
+        }
+
+        // === Difficulty bonus (easier builds score slightly higher for accessibility) ===
+        if (b.difficulty) {
+            const diffBonus = { Easy: 5, Medium: 3, Hard: 0, "Very Hard": -3 };
+            score += diffBonus[b.difficulty] || 0;
+        }
+
+        // === Feasibility bonus: how much of the build is already owned ===
+        const feasibilityRatio = currentBalls.length > 0 ? ballOverlap / buildBalls.length : 0;
+        if (feasibilityRatio >= 0.5) {
+            score += 15;
+            reasons.push(`${Math.round(feasibilityRatio * 100)}% du build déjà en place`);
+        }
+
+        // === Roadmap with full evolution chains ===
+        const roadmap = buildBalls.map((targetBall) => getEvolutionChain(targetBall, currentBalls));
 
         b.score = score;
-        b.reasons = reasons;
+        b.reasons = [...new Set(reasons)]; // deduplicate
         b.roadmap = roadmap;
         b.core_balls_list = buildBalls;
         b.core_passives_list = buildPassives;
@@ -483,16 +671,120 @@ function computeSuggestions() {
 
     scoredBuilds.sort((a, b) => b.score - a.score);
 
-    // Step 4: Passive evolutions
-    const passiveEvos = state.passives.filter((p) => p.is_evolution);
+    // ─── Step 6: Passive evolution suggestions ───
+    const passiveEvos = [];
+    const evoPassives = state.passives.filter((p) => p.is_evolution && p.combination);
+    for (const ep of evoPassives) {
+        const ingredients = ep.combination.split("+").map((s) => s.trim());
+        const owned = ingredients.filter((ing) => currentPassives.includes(ing));
+        const missing = ingredients.filter((ing) => !currentPassives.includes(ing));
+        passiveEvos.push({
+            ...ep,
+            ingredients,
+            owned_ingredients: owned,
+            missing_ingredients: missing,
+            ready: missing.length === 0,
+            progress: ingredients.length > 0 ? owned.length / ingredients.length : 0,
+        });
+    }
+    passiveEvos.sort((a, b) => b.progress - a.progress || (a.ready ? 0 : 1) - (b.ready ? 0 : 1));
+
+    // ─── Step 7: Smart "next pickup" — what single ball would unlock the most evolutions ───
+    const nextPickupScores = {};
+    for (const evo of state.evolutions) {
+        const ings = [evo.ingredient_1, evo.ingredient_2];
+        if (evo.ingredient_3) ings.push(evo.ingredient_3);
+        const alts = [];
+        if (evo.ingredient_1_alt) alts.push({ orig: evo.ingredient_1, alt: evo.ingredient_1_alt });
+        if (evo.ingredient_2_alt) alts.push({ orig: evo.ingredient_2, alt: evo.ingredient_2_alt });
+
+        // For each ingredient: if all OTHERS are owned, this ball unlocks the evolution
+        for (const ing of ings) {
+            if (currentBalls.includes(ing)) continue;
+            const others = ings.filter((i) => i !== ing);
+            const allOthersOwned = others.every((o) => currentBalls.includes(o));
+            if (allOthersOwned && others.length > 0) {
+                const evoTierVal = { "S+": 50, S: 40, A: 25, B: 12 };
+                const val = evoTierVal[evo.tier] || 10;
+                nextPickupScores[ing] = (nextPickupScores[ing] || 0) + val;
+            }
+        }
+        // Same for alt ingredients
+        for (const { orig, alt } of alts) {
+            if (currentBalls.includes(alt)) continue;
+            const others = ings.filter((i) => i !== orig);
+            const allOthersOwned = others.every((o) => currentBalls.includes(o));
+            if (allOthersOwned && others.length > 0) {
+                const evoTierVal = { "S+": 50, S: 40, A: 25, B: 12 };
+                const val = evoTierVal[evo.tier] || 10;
+                nextPickupScores[alt] = (nextPickupScores[alt] || 0) + val;
+            }
+        }
+    }
+    const nextPickups = Object.entries(nextPickupScores)
+        .map(([ball, pickupScore]) => {
+            const ballData = ballsByName[ball];
+            // Which evolutions does this ball unlock?
+            const unlocks = state.evolutions.filter((evo) => {
+                const ings = [evo.ingredient_1, evo.ingredient_2];
+                if (evo.ingredient_3) ings.push(evo.ingredient_3);
+                if (!ings.includes(ball)) {
+                    // Check if it's an alt ingredient
+                    const isAlt = (evo.ingredient_1_alt === ball || evo.ingredient_2_alt === ball);
+                    if (!isAlt) return false;
+                }
+                return true;
+            }).filter((evo) => {
+                const ings = [evo.ingredient_1, evo.ingredient_2];
+                if (evo.ingredient_3) ings.push(evo.ingredient_3);
+                // Replace the ball's slot with "owned" and check if all others are owned
+                const relevantIngs = ings.filter((i) => i !== ball);
+                return relevantIngs.every((o) => currentBalls.includes(o));
+            }).map((evo) => evo.result_ball);
+
+            return {
+                ball,
+                score: pickupScore,
+                image: ballData ? ballData.image : getImagePath("balls", ball),
+                rarity: ballData ? ballData.rarity : null,
+                effect: ballData ? ballData.effect : null,
+                unlocks,
+            };
+        })
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 6);
+
+    // ─── Step 8: Status effect analysis summary ───
+    const statusAnalysis = {
+        profile: statusProfile,
+        dominant: dominantEffects,
+        suggestion: null,
+    };
+    if (dominantEffects.length > 0) {
+        // Find what evolutions enhance the dominant effect
+        const enhancingEvos = possibleEvolutions.filter((evo) => {
+            const resultEffects = getStatusEffects(evo.result_ball);
+            return resultEffects.some((e) => dominantEffects.includes(e));
+        });
+        statusAnalysis.enhancing_evolutions = enhancingEvos.slice(0, 3).map((e) => e.result_ball);
+        if (dominantEffects[0] === "Bleed") statusAnalysis.suggestion = "Build Bleed puissant : visez Haemorrhage ou Vampire Lord";
+        else if (dominantEffects[0] === "Burn") statusAnalysis.suggestion = "Build Burn solide : Magma et Inferno amplifient massivement";
+        else if (dominantEffects[0] === "Freeze") statusAnalysis.suggestion = "Build Control : Blizzard et Frozen Flame offrent un contrôle total";
+        else if (dominantEffects[0] === "Charm") statusAnalysis.suggestion = "Build Charm : visez Incubus/Succubus et ultimement Satan";
+        else if (dominantEffects[0] === "Poison") statusAnalysis.suggestion = "Build Poison : Virus propage les dégâts, Nuclear Bomb comme finisher";
+        else if (dominantEffects[0] === "Lifesteal" || dominantEffects[0] === "Heal") statusAnalysis.suggestion = "Build Sustain : Nosferatu est l'évolution ultime, unkillable";
+    }
 
     return {
         character: charInfo,
         current_balls: currentBalls,
         current_passives: currentPassives,
-        possible_evolutions: possibleEvolutions.slice(0, 10),
+        possible_evolutions: possibleEvolutions.slice(0, 15),
         recommended_builds: scoredBuilds.slice(0, 5),
-        passive_evolutions: passiveEvos,
+        passive_evolutions: passiveEvos.slice(0, 6),
+        next_pickups: nextPickups,
+        status_analysis: statusAnalysis,
+        biome_synergy: biomeSynergy,
     };
 }
 
@@ -502,7 +794,76 @@ function renderResults(data) {
     const resultsPanel = $("#results");
     resultsPanel.classList.remove("hidden");
 
-    // Evolutions
+    // ─── Analysis Summary (status effects + biome) ───
+    let analysisSummary = "";
+
+    // Status effect analysis
+    if (data.status_analysis && data.status_analysis.dominant.length > 0) {
+        const effectTags = data.status_analysis.dominant.map((e) => {
+            const count = data.status_analysis.profile[e];
+            return `<span class="effect-tag">${e} <small>×${count}</small></span>`;
+        }).join("");
+        const suggestion = data.status_analysis.suggestion
+            ? `<div class="analysis-suggestion">💡 ${data.status_analysis.suggestion}</div>` : "";
+        const enhancing = (data.status_analysis.enhancing_evolutions || []).length > 0
+            ? `<div class="analysis-enhance">🔬 Évolutions synergiques : ${data.status_analysis.enhancing_evolutions.map(
+                (e) => `<strong>${e}</strong>`).join(", ")}</div>` : "";
+        analysisSummary += `
+        <div class="analysis-card">
+            <h4 class="analysis-title">📊 Profil de Statut</h4>
+            <div class="effect-tags">${effectTags}</div>
+            ${suggestion}${enhancing}
+        </div>`;
+    }
+
+    // Biome synergy
+    if (data.biome_synergy) {
+        const strongTags = data.biome_synergy.strong.map((s) => `<span class="effect-tag strong">${s}</span>`).join("");
+        const weakTags = data.biome_synergy.weak.map((s) => `<span class="effect-tag weak">${s}</span>`).join("");
+        analysisSummary += `
+        <div class="analysis-card">
+            <h4 class="analysis-title">🌍 Synergies Biome</h4>
+            <p class="analysis-desc">${data.biome_synergy.desc}</p>
+            <div class="biome-effects">
+                ${strongTags ? `<div>✅ Efficace : ${strongTags}</div>` : ""}
+                ${weakTags ? `<div>❌ Résisté : ${weakTags}</div>` : ""}
+            </div>
+        </div>`;
+    }
+
+    const analysisSectionEl = $("#analysis-section");
+    if (analysisSummary) {
+        analysisSectionEl.classList.remove("hidden");
+        analysisSectionEl.innerHTML = `
+            <h3 class="section-subtitle"><span class="icon">🧠</span> Analyse Intelligente</h3>
+            <div class="analysis-grid">${analysisSummary}</div>`;
+    } else {
+        analysisSectionEl.classList.add("hidden");
+    }
+
+    // ─── Next Pickups ───
+    const nextPickupsEl = $("#next-pickups");
+    if (data.next_pickups && data.next_pickups.length > 0) {
+        nextPickupsEl.classList.remove("hidden");
+        nextPickupsEl.innerHTML = `
+            <h3 class="section-subtitle"><span class="icon">🎯</span> Prochaine Balle à Trouver</h3>
+            <p class="section-hint">Balles qui débloquent le plus d'évolutions si tu les trouves</p>
+            <div class="pickup-grid">
+                ${data.next_pickups.map((p) => `
+                    <div class="pickup-card">
+                        ${imgTag(p.image, p.ball, "⚪")}
+                        <div class="pickup-info">
+                            <span class="pickup-name">${p.ball}</span>
+                            ${p.rarity ? `<span class="pickup-rarity rarity-${p.rarity.toLowerCase()}">${p.rarity}</span>` : ""}
+                            <span class="pickup-unlocks">Débloque : ${p.unlocks.map((u) => `<strong>${u}</strong>`).join(", ")}</span>
+                        </div>
+                    </div>`).join("")}
+            </div>`;
+    } else {
+        nextPickupsEl.classList.add("hidden");
+    }
+
+    // ─── Evolutions ───
     const quickEvos = $("#quick-evos");
     const evoCards = $("#evo-cards");
 
@@ -511,29 +872,39 @@ function renderResults(data) {
         evoCards.innerHTML = data.possible_evolutions
             .map((evo) => {
                 const readyClass = evo.have_both ? "ready" : "";
-                // Handle triple evolutions
                 const ing3HTML = evo.ingredient_3 ? `
                     <span class="evo-plus">+</span>
                     <div class="evo-ingredient ${state.selectedBalls.includes(evo.ingredient_3) ? "owned" : "missing"}">
                         ${imgTag(null, evo.ingredient_3, "⚪")}
                         <span class="evo-label">${evo.ingredient_3}</span>
                     </div>` : '';
+                // Alt ingredients hint
+                const altHints = [];
+                if (evo.ingredient_1_alt) altHints.push(`${evo.ingredient_1} remplaçable par ${evo.ingredient_1_alt}`);
+                if (evo.ingredient_2_alt) altHints.push(`${evo.ingredient_2} remplaçable par ${evo.ingredient_2_alt}`);
+                const altHTML = altHints.length > 0
+                    ? `<div class="evo-alt">🔄 ${altHints.join(" · ")}</div>` : "";
+                const tipsHTML = evo.tips
+                    ? `<div class="evo-tips">💡 ${evo.tips}</div>` : "";
                 return `
                 <div class="evo-card ${readyClass}">
-                    <div class="evo-ingredient ${state.selectedBalls.includes(evo.ingredient_1) ? "owned" : "missing"}">
-                        ${imgTag(evo.ingredient_1_image, evo.ingredient_1, "⚪")}
-                        <span class="evo-label">${evo.ingredient_1}</span>
+                    <div class="evo-recipe">
+                        <div class="evo-ingredient ${state.selectedBalls.includes(evo.ingredient_1) ? "owned" : "missing"}">
+                            ${imgTag(evo.ingredient_1_image || getImagePath("balls", evo.ingredient_1), evo.ingredient_1, "⚪")}
+                            <span class="evo-label">${evo.ingredient_1}</span>
+                        </div>
+                        <span class="evo-plus">+</span>
+                        <div class="evo-ingredient ${state.selectedBalls.includes(evo.ingredient_2) ? "owned" : "missing"}">
+                            ${imgTag(evo.ingredient_2_image || getImagePath("balls", evo.ingredient_2), evo.ingredient_2, "⚪")}
+                            <span class="evo-label">${evo.ingredient_2}</span>
+                        </div>
+                        ${ing3HTML}
+                        <span class="evo-arrow">→</span>
+                        ${imgTag(evo.result_image, evo.result_ball, "✨")}
+                        <span class="evo-result-name">${evo.result_ball}</span>
+                        <span class="evo-tier tier-${(evo.tier || "B").toLowerCase().replace('+', '-plus')}">${evo.tier}</span>
                     </div>
-                    <span class="evo-plus">+</span>
-                    <div class="evo-ingredient ${state.selectedBalls.includes(evo.ingredient_2) ? "owned" : "missing"}">
-                        ${imgTag(evo.ingredient_2_image, evo.ingredient_2, "⚪")}
-                        <span class="evo-label">${evo.ingredient_2}</span>
-                    </div>
-                    ${ing3HTML}
-                    <span class="evo-arrow">→</span>
-                    ${imgTag(evo.result_image, evo.result_ball, "✨")}
-                    <span class="evo-label" style="font-weight:700;color:var(--text-primary)">${evo.result_ball}</span>
-                    <span class="evo-tier tier-${evo.tier.toLowerCase().replace('+', '-plus')}">${evo.tier}</span>
+                    ${altHTML}${tipsHTML}
                 </div>`;
             })
             .join("");
@@ -541,7 +912,34 @@ function renderResults(data) {
         quickEvos.classList.add("hidden");
     }
 
-    // Builds
+    // ─── Passive Evolutions ───
+    const passiveEvosEl = $("#passive-evos");
+    if (data.passive_evolutions && data.passive_evolutions.length > 0 && data.passive_evolutions.some((p) => p.progress > 0)) {
+        passiveEvosEl.classList.remove("hidden");
+        passiveEvosEl.innerHTML = `
+            <h3 class="section-subtitle"><span class="icon">🛡️</span> Évolutions de Passifs</h3>
+            <div class="passive-evo-grid">
+                ${data.passive_evolutions.filter((p) => p.progress > 0).map((pe) => `
+                    <div class="passive-evo-card ${pe.ready ? "ready" : ""}">
+                        ${imgTag(pe.image, pe.name, "🛡️")}
+                        <div class="passive-evo-info">
+                            <span class="passive-evo-name">${pe.name}</span>
+                            <div class="passive-evo-recipe">
+                                ${pe.ingredients.map((ing) =>
+                                    `<span class="${pe.owned_ingredients.includes(ing) ? "have" : "need"}">${ing}</span>`
+                                ).join(" + ")}
+                            </div>
+                            <div class="passive-evo-bar">
+                                <div class="passive-evo-fill" style="width:${pe.progress * 100}%"></div>
+                            </div>
+                        </div>
+                    </div>`).join("")}
+            </div>`;
+    } else {
+        passiveEvosEl.classList.add("hidden");
+    }
+
+    // ─── Builds ───
     const buildsSection = $("#build-suggestions");
     if (data.recommended_builds && data.recommended_builds.length > 0) {
         buildsSection.innerHTML = data.recommended_builds
@@ -562,36 +960,73 @@ function renderBuildCard(build, idx) {
     const tierClass = `tier-${build.tier.toLowerCase().replace('+', '-plus')}-card`;
     const rankEmojis = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"];
 
-    // Roadmap
+    // ─── Ratings bar ───
+    let ratingsHTML = "";
+    if (build.dps_rating || build.survival_rating || build.skill_cap) {
+        const ratingBar = (label, value, maxVal = 10, color) => {
+            const pct = Math.round((value / maxVal) * 100);
+            return `<div class="rating-row">
+                <span class="rating-label">${label}</span>
+                <div class="rating-bar"><div class="rating-fill" style="width:${pct}%;background:${color}"></div></div>
+                <span class="rating-value">${value}/${maxVal}</span>
+            </div>`;
+        };
+        ratingsHTML = `
+        <div class="build-ratings">
+            ${build.dps_rating ? ratingBar("DPS", build.dps_rating, 10, "var(--danger)") : ""}
+            ${build.survival_rating ? ratingBar("Survie", build.survival_rating, 10, "var(--success)") : ""}
+            ${build.skill_cap ? ratingBar("Difficulté", build.skill_cap, 10, "var(--warning)") : ""}
+        </div>`;
+    }
+
+    // ─── Timeline ───
+    let timelineHTML = "";
+    if (build.timeline) {
+        timelineHTML = `
+        <div class="build-section">
+            <span class="build-section-label">⏱️ Timeline</span>
+            <div class="build-section-content">
+                <div class="build-timeline">
+                    ${build.timeline.early ? `<div class="timeline-phase"><span class="phase-label early">Early</span><span class="phase-desc">${build.timeline.early}</span></div>` : ""}
+                    ${build.timeline.mid ? `<div class="timeline-phase"><span class="phase-label mid">Mid</span><span class="phase-desc">${build.timeline.mid}</span></div>` : ""}
+                    ${build.timeline.late ? `<div class="timeline-phase"><span class="phase-label late">Late</span><span class="phase-desc">${build.timeline.late}</span></div>` : ""}
+                </div>
+            </div>
+        </div>`;
+    }
+
+    // ─── Roadmap with evolution chains ───
     let roadmapHTML = "";
     if (build.roadmap && build.roadmap.length > 0) {
+        const renderChainNode = (node, depth = 0) => {
+            if (!node) return "";
+            const indent = depth > 0 ? `style="margin-left:${depth * 16}px"` : "";
+            let childrenHTML = "";
+            if (node.children && node.children.length > 0) {
+                childrenHTML = `<div class="chain-children">
+                    ${node.children.map((c) => renderChainNode(c, depth + 1)).join('<span class="chain-plus">+</span>')}
+                </div>`;
+            }
+            const altHTML = node.alt ? `<span class="chain-alt">(ou ${node.alt})</span>` : "";
+            const tipsHTML = node.tips && depth === 0 ? `<div class="chain-tips">💡 ${node.tips}</div>` : "";
+            return `
+            <div class="roadmap-step ${node.status}" ${indent}>
+                ${imgTag(node.image, node.ball, "⚪")}
+                <span class="step-name">${node.ball}</span>
+                ${altHTML}
+                <span class="roadmap-status ${node.status}">${statusLabel(node.status)}</span>
+                ${childrenHTML}${tipsHTML}
+            </div>`;
+        };
+
         roadmapHTML = `
         <div class="build-section">
-            <span class="build-section-label">Roadmap</span>
+            <span class="build-section-label">🗺️ Roadmap</span>
             <div class="build-section-content">
                 <div class="roadmap">
-                    ${build.roadmap
-                        .map((step, i) => {
-                            let recipeHTML = "";
-                            if (step.ingredient_1) {
-                                recipeHTML = `<div class="roadmap-recipe">
-                                    ${imgTag(step.ing1_image, step.ingredient_1, "⚪")}
-                                    <span class="${step.have_1 ? "have" : "need"}">${step.ingredient_1}</span>
-                                    +
-                                    ${imgTag(step.ing2_image, step.ingredient_2, "⚪")}
-                                    <span class="${step.have_2 ? "have" : "need"}">${step.ingredient_2}</span>
-                                </div>`;
-                            }
-                            return `
-                            ${i > 0 ? '<span class="roadmap-arrow">→</span>' : ""}
-                            <div class="roadmap-step ${step.status}">
-                                ${imgTag(step.image, step.ball, "⚪")}
-                                <span class="step-name">${step.ball}</span>
-                                <span class="roadmap-status ${step.status}">${statusLabel(step.status)}</span>
-                                ${recipeHTML}
-                            </div>`;
-                        })
-                        .join("")}
+                    ${build.roadmap.map((step, i) => {
+                        return `${i > 0 ? '<span class="roadmap-arrow">→</span>' : ""}${renderChainNode(step)}`;
+                    }).join("")}
                 </div>
             </div>
         </div>`;
@@ -601,7 +1036,9 @@ function renderBuildCard(build, idx) {
     const ballsHTML = build.core_balls_list
         .map((name) => {
             const img = build.balls_images[name];
-            return `<span class="build-item">${imgTag(img, name, "⚪")} ${name}</span>`;
+            const ball = ballsByName[name];
+            const effectHint = ball && ball.status_effect ? ` (${ball.status_effect})` : "";
+            return `<span class="build-item">${imgTag(img, name, "⚪")} ${name}<small class="ball-effect-hint">${effectHint}</small></span>`;
         })
         .join("");
 
@@ -620,17 +1057,50 @@ function renderBuildCard(build, idx) {
             ? `<div class="build-reasons">${build.reasons.map((r) => `<span class="reason-tag">✦ ${r}</span>`).join("")}</div>`
             : "";
 
+    // Difficulty badge
+    const diffBadge = build.difficulty
+        ? `<span class="difficulty-badge diff-${(build.difficulty || "").toLowerCase().replace(/ /g, "-")}">${build.difficulty}</span>` : "";
+
+    // Subtitle
+    const subtitleHTML = build.subtitle
+        ? `<span class="build-subtitle">${build.subtitle}</span>` : "";
+
+    // Pros/Cons (use arrays if available, else fallback to strings)
+    let prosConsHTML = "";
+    if (build.pros && build.cons) {
+        prosConsHTML = `
+        <div class="build-pros-cons">
+            <div class="build-pro-list">
+                <span class="pros-label">✅ Forces</span>
+                ${(build.pros || []).map((p) => `<div class="pro-item">+ ${p}</div>`).join("")}
+            </div>
+            <div class="build-con-list">
+                <span class="cons-label">❌ Faiblesses</span>
+                ${(build.cons || []).map((c) => `<div class="con-item">− ${c}</div>`).join("")}
+            </div>
+        </div>`;
+    } else {
+        prosConsHTML = `
+        <div class="build-pros-cons">
+            <div class="build-pro">✅ ${build.strengths || "N/A"}</div>
+            <div class="build-con">❌ ${build.weaknesses || "N/A"}</div>
+        </div>`;
+    }
+
     return `
     <div class="build-card ${tierClass}">
         <div class="build-header">
             <span class="build-rank">${rankEmojis[idx] || ""}</span>
             <span class="build-name">${build.name}</span>
+            ${subtitleHTML}
             <span class="build-archetype">${build.archetype}</span>
             <span class="build-tier-badge tier-${build.tier.toLowerCase().replace('+', '-plus')}">Tier ${build.tier}</span>
+            ${diffBadge}
             <span class="build-score">Score: <strong>${build.score}</strong></span>
         </div>
 
         ${reasonsHTML}
+        ${ratingsHTML}
 
         <div class="build-body">
             <div class="build-section">
@@ -648,6 +1118,7 @@ function renderBuildCard(build, idx) {
             </div>
 
             ${roadmapHTML}
+            ${timelineHTML}
 
             <div class="build-section">
                 <span class="build-section-label">📋 Stratégie</span>
@@ -656,10 +1127,7 @@ function renderBuildCard(build, idx) {
                 </div>
             </div>
 
-            <div class="build-pros-cons">
-                <div class="build-pro">✅ ${build.strengths || "N/A"}</div>
-                <div class="build-con">❌ ${build.weaknesses || "N/A"}</div>
-            </div>
+            ${prosConsHTML}
         </div>
     </div>`;
 }
