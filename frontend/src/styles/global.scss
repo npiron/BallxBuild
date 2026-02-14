@@ -1,0 +1,121 @@
+@use 'variables' as *;
+@use 'reset';
+@use 'animations';
+
+// ─── CSS Custom Properties (for runtime theming) ───
+:root {
+  --bg-primary: #{$bg-primary};
+  --bg-secondary: #{$bg-secondary};
+  --bg-card: #{$bg-card};
+  --bg-card-hover: #{$bg-card-hover};
+  --bg-input: #{$bg-input};
+  --bg-selected: #{$bg-selected};
+  --border: #{$border};
+  --border-glow: #{$border-glow};
+  --text-primary: #{$text-primary};
+  --text-secondary: #{$text-secondary};
+  --text-muted: #{$text-muted};
+  --accent-primary: #{$accent-primary};
+  --accent-secondary: #{$accent-secondary};
+  --accent-glow: #{$accent-glow};
+  --tier-s: #{$tier-s};
+  --tier-s-plus: #{$tier-s-plus};
+  --tier-a: #{$tier-a};
+  --tier-a-plus: #{$tier-a-plus};
+  --tier-b: #{$tier-b};
+  --tier-c: #{$tier-c};
+  --rarity-common: #{$rarity-common};
+  --rarity-uncommon: #{$rarity-uncommon};
+  --rarity-rare: #{$rarity-rare};
+  --rarity-epic: #{$rarity-epic};
+  --rarity-legendary: #{$rarity-legendary};
+  --success: #{$success};
+  --warning: #{$warning};
+  --danger: #{$danger};
+  --radius: #{$radius};
+  --radius-sm: #{$radius-sm};
+  --radius-lg: #{$radius-lg};
+  --shadow: #{$shadow};
+  --shadow-glow: 0 0 20px var(--accent-glow);
+  --font-display: #{$font-display};
+  --font-body: #{$font-body};
+  --transition: #{$transition};
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+// ─── Scrollbar ───
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
+
+// ─── Image placeholder fallback ───
+.img-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  background: var(--bg-input);
+}
+
+// ─── Container ───
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// ─── Tooltip (global) ───
+.tooltip {
+  position: fixed;
+  z-index: 10000;
+  background: #1e1e3a;
+  border: 1px solid var(--accent-primary);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  max-width: 260px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+.tooltip-title {
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  color: var(--accent-secondary);
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.tooltip-effect {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.tooltip-meta {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  padding-top: 4px;
+}

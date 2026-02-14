@@ -1,0 +1,65 @@
+// ─── SCSS Variables (mirrors CSS custom properties) ───
+
+// Backgrounds
+$bg-primary: #0a0a0f;
+$bg-secondary: #12121a;
+$bg-card: #1a1a2e;
+$bg-card-hover: #222240;
+$bg-input: #16162a;
+$bg-selected: #2a1a4a;
+
+// Borders
+$border: #2a2a4a;
+$border-glow: #6c3fb5;
+
+// Text
+$text-primary: #e8e6f0;
+$text-secondary: #c4c2d4;
+$text-muted: #9896b0;
+
+// Accents
+$accent-primary: #8b5cf6;
+$accent-secondary: #a78bfa;
+$accent-glow: rgba(139, 92, 246, 0.3);
+
+// Tiers
+$tier-s: #ff6b35;
+$tier-s-plus: #ff3d00;
+$tier-a: #fbbf24;
+$tier-a-plus: #f59e0b;
+$tier-b: #60a5fa;
+$tier-c: #9ca3af;
+
+// Rarities
+$rarity-common: #9ca3af;
+$rarity-uncommon: #34d399;
+$rarity-rare: #60a5fa;
+$rarity-epic: #a78bfa;
+$rarity-legendary: #f59e0b;
+
+// Semantic
+$success: #34d399;
+$warning: #fbbf24;
+$danger: #ef4444;
+
+// Radii
+$radius: 12px;
+$radius-sm: 8px;
+$radius-lg: 16px;
+
+// Shadows
+$shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+$shadow-glow: 0 0 20px $accent-glow;
+
+// Fonts
+$font-display: 'Press Start 2P', monospace;
+$font-body: 'Inter', -apple-system, sans-serif;
+
+// Transitions
+$transition: 0.2s ease;
+
+// Breakpoints
+$breakpoint-mobile: 768px;
+
+// Layout
+$container-max: 1200px;

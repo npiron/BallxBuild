@@ -1,0 +1,29 @@
+export interface Biome {
+  id: number
+  name: string
+  subtitle: string
+  difficulty: number
+  avg_time: string
+  recommended_level: string
+  description: string
+  hazards: string[]
+  advantages: string[]
+  enemies: string[]
+  boss_name: string
+  boss_hp: string
+  boss_phases: number
+  boss_description: string
+  boss_attacks: string[]
+  boss_strategy: string
+  boss_weaknesses: string[]
+  boss_rewards: string[]
+  recommended_builds: string[]
+  tips: string[]
+  image: string
+  gears_to_unlock: string
+  blueprints: string
+  total_blueprints: string
+  first_clear_unlocks: string
+  source: string
+  unlock_requirement?: string
+}

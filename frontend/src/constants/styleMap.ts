@@ -1,0 +1,17 @@
+export const STYLE_MAP: Record<string, string[]> = {
+  aoe: ['AOE Status', 'DPS', 'Burst'],
+  status: ['AOE Status'],
+  sustain: ['Sustain', 'Survival'],
+  tank: ['Sustain', 'Survival'],
+  control: ['Control'],
+  freeze: ['Control'],
+  boss: ['Boss Killer', 'DPS', 'Burst'],
+  dps: ['DPS', 'Boss Killer', 'Burst'],
+  minion: ['Minion Swarm'],
+  swarm: ['Minion Swarm'],
+  hybrid: ['Hybrid'],
+  laser: ['Hybrid'],
+  burst: ['Burst', 'DPS'],
+  speedrun: ['Speedrun', 'DPS', 'Burst'],
+  survival: ['Survival', 'Sustain'],
+}
