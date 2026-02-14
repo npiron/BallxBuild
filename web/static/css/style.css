@@ -14,8 +14,8 @@
     --border: #2a2a4a;
     --border-glow: #6c3fb5;
     --text-primary: #e8e6f0;
-    --text-secondary: #9896a8;
-    --text-muted: #6a6880;
+    --text-secondary: #c4c2d4;
+    --text-muted: #9896b0;
     --accent-primary: #8b5cf6;
     --accent-secondary: #a78bfa;
     --accent-glow: rgba(139, 92, 246, 0.3);
@@ -209,8 +209,8 @@ body {
 
 /* ─── Character Grid ─── */
 .character-grid .entity-item {
-    width: 110px;
-    height: 130px;
+    width: 120px;
+    height: 140px;
     cursor: pointer;
     border-radius: var(--radius);
     border: 2px solid var(--border);
@@ -239,8 +239,8 @@ body {
 }
 
 .character-grid .entity-item img {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
     object-fit: contain;
     border-radius: 50%;
     margin-bottom: 6px;
@@ -268,8 +268,8 @@ body {
 
 /* ─── Biome Grid ─── */
 .biome-grid .entity-item {
-    width: 140px;
-    height: 58px;
+    width: 160px;
+    height: 64px;
     cursor: pointer;
     border-radius: var(--radius-sm);
     border: 2px solid var(--border);
@@ -292,8 +292,8 @@ body {
 }
 
 .biome-grid .entity-item img {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
     object-fit: contain;
 }
 
@@ -317,8 +317,8 @@ body {
 
 .ball-grid .entity-item,
 .passive-grid .entity-item {
-    width: 85px;
-    height: 100px;
+    width: 95px;
+    height: 110px;
     cursor: pointer;
     border-radius: var(--radius-sm);
     border: 2px solid var(--border);
@@ -348,8 +348,8 @@ body {
 
 .ball-grid .entity-item img,
 .passive-grid .entity-item img {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     object-fit: contain;
     margin-bottom: 4px;
 }
@@ -403,8 +403,8 @@ body {
 }
 
 .selected-tag img {
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: 30px;
     object-fit: contain;
     border-radius: 50%;
 }
@@ -588,8 +588,8 @@ body {
 }
 
 .evo-card img {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
 }
 
@@ -692,7 +692,7 @@ body {
 
 .build-archetype {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     padding: 4px 12px;
     background: var(--bg-input);
     border-radius: 20px;
@@ -708,7 +708,7 @@ body {
 
 .build-score {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     margin-left: auto;
     white-space: nowrap;
 }
@@ -731,9 +731,9 @@ body {
 }
 
 .build-section-label {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     min-width: 85px;
@@ -763,8 +763,8 @@ body {
 }
 
 .build-item img {
-    width: 28px;
-    height: 28px;
+    width: 34px;
+    height: 34px;
     object-fit: contain;
     border-radius: 50%;
 }
@@ -810,7 +810,7 @@ body {
 .roadmap {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
 }
 
@@ -818,23 +818,23 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    padding: 8px;
+    gap: 6px;
+    padding: 12px;
     background: var(--bg-input);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    min-width: 85px;
+    min-width: 110px;
     position: relative;
 }
 
 .roadmap-step img {
-    width: 40px;
-    height: 40px;
+    width: 52px;
+    height: 52px;
     object-fit: contain;
 }
 
 .roadmap-step .step-name {
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     text-align: center;
     color: var(--text-secondary);
 }
@@ -859,12 +859,12 @@ body {
 }
 
 .roadmap-status {
-    font-size: 0.6rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    padding: 2px 7px;
-    border-radius: 3px;
+    padding: 3px 10px;
+    border-radius: 4px;
 }
 
 .roadmap-status.owned { background: var(--success); color: #0a0a0f; }
@@ -874,25 +874,25 @@ body {
 .roadmap-status.pickup { background: var(--rarity-uncommon); color: #0a0a0f; }
 
 .roadmap-recipe {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
     text-align: center;
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 4px;
 }
 
 .roadmap-recipe img {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
 }
 
 .roadmap-recipe .have { opacity: 1; }
 .roadmap-recipe .need { opacity: 0.35; }
 
 .roadmap-arrow {
-    font-size: 1rem;
-    color: var(--text-muted);
+    font-size: 1.3rem;
+    color: var(--accent-secondary);
 }
 
 /* ─── Reasons ─── */
@@ -991,11 +991,11 @@ body {
     .panel { padding: 16px; }
     .container { padding: 0 12px 20px; }
     .build-pros-cons { grid-template-columns: 1fr; }
-    .character-grid .entity-item { width: 90px; height: 110px; }
-    .character-grid .entity-item img { width: 50px; height: 50px; }
+    .character-grid .entity-item { width: 100px; height: 120px; }
+    .character-grid .entity-item img { width: 56px; height: 56px; }
     .action-bar { flex-direction: column; }
     .btn { width: 100%; justify-content: center; }
-    .biome-grid .entity-item { width: 120px; }
+    .biome-grid .entity-item { width: 140px; }
 }
 
 /* ═══ IMAGE PLACEHOLDER ═══ */
