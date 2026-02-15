@@ -945,6 +945,12 @@ body {
     margin-top: 40px;
 }
 
+.footer-note {
+    margin-top: 6px;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+}
+
 .footer a {
     color: var(--accent-secondary);
     text-decoration: none;
