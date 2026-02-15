@@ -40,7 +40,8 @@ const emit = defineEmits<{
 
 .panel {
   @include card-style;
-  margin-bottom: 24px;
+  max-width: $container-max;
+  margin: 0 auto 24px;
   padding: 24px;
 }
 

@@ -44,24 +44,8 @@ const styles: StyleOption[] = [
 @use '@/styles/variables' as *;
 @use '@/styles/mixins' as *;
 
-.input-group { margin-bottom: 20px; }
-
-.input-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: $font-display;
-  font-size: 0.6rem;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-  letter-spacing: 1px;
-  .icon { font-size: 1rem; }
-  .hint {
-    font-family: $font-body;
-    font-size: 0.7rem;
-    color: var(--text-muted);
-  }
-}
+.input-group { @include input-group; }
+.input-label { @include input-label; }
 
 .style-grid {
   display: grid;

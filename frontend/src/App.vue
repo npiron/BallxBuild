@@ -98,7 +98,7 @@ function handleReset(): void {
 
 .app-main {
   flex: 1;
-  padding-bottom: 40px;
+  padding: 0 16px 40px;
 }
 
 .loading-screen {
