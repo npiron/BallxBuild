@@ -5,6 +5,7 @@ import { useRunState } from '@/stores/useRunState'
 import { computeSuggestions } from '@/composables/useSuggestionEngine'
 import type { SuggestionResult } from '@/types'
 import HeroHeader from '@/components/layout/HeroHeader.vue'
+import AppFooter from '@/components/layout/AppFooter.vue'
 import RunStatePanel from '@/components/run/RunStatePanel.vue'
 import ResultsPanel from '@/components/results/ResultsPanel.vue'
 
@@ -81,6 +82,8 @@ function handleReset(): void {
       <div class="loader-spinner" />
       <p>Chargement des données…</p>
     </div>
+
+    <AppFooter />
   </div>
 </template>
 

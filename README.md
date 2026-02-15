@@ -21,7 +21,13 @@ docs/               ← Site statique (GitHub Pages)
 scrape_ballxpit_net.py   ← Scraper de données depuis ballxpit.net
 scrape_assets.py         ← Scraper d'images depuis le wiki
 merge_wiki_data.py       ← Fusion des données wiki → JSON
+SOURCES.md               ← Liste des sources internet consultées
 ```
+
+## 🌐 Sources de données
+
+Les données proviennent principalement de **[ballxpit.net](https://ballxpit.net)** et **[ballxpit.wiki.gg](https://ballxpit.wiki.gg)**.
+D'autres ressources communautaires (Steam, IGN, Dexerto, Game Rant…) sont référencées dans le fichier **[SOURCES.md](SOURCES.md)**.
 
 ## ⚙️ Fonctionnalités du moteur
 
