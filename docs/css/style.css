@@ -954,6 +954,12 @@ body {
     text-decoration: underline;
 }
 
+.footer-sources {
+    font-size: 0.8em;
+    margin-top: 6px;
+    opacity: 0.8;
+}
+
 /* ═══ TOOLTIP ═══ */
 .tooltip {
     position: fixed;
